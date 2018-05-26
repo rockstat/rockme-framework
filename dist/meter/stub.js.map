@@ -1,0 +1,1 @@
+{"version":3,"file":"stub.js","sourceRoot":"","sources":["../../src/meter/stub.ts"],"names":[],"mappings":";;AAEA;IACE,IAAI,CAAC,MAAc,EAAE,IAAuC,IAAU,CAAC;IACvE,QAAQ,CAAC,MAAc,EAAE,IAAuC;QAC9D,OAAO,GAAG,EAAE,CAAC,CAAC,CAAC;IACjB,CAAC;IACD,IAAI,CAAC,MAAc,EAAE,QAAgB,EAAE,IAAuC,IAAU,CAAC;CAC1F;AAND,8BAMC"}

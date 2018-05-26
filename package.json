@@ -1,0 +1,40 @@
+{
+  "name": "rockmets",
+  "version": "1.0.0",
+  "description": "Agnostic JSON-RPC2 client/server implementation with addressing extension and library",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "ts-node-dev -r 'tsconfig-paths/register' ./src/start.ts | pino",
+    "build": "rimraf dist && tsc  -r 'source-map-support/register' -p tsconfig.json",
+    "prod": "node dist/start",
+    "clean": "rimraf dist",
+    "lint": "tslint -c tslint.json -t stylish -p ./tsconfig.json",
+    "security-check": "nsp check",
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/madiedinro/agnostic-rpc.git"
+  },
+  "author": "Dmitry Rodin <madiedinro@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/madiedinro/agnostic-rpc/issues"
+  },
+  "homepage": "https://github.com/madiedinro/agnostic-rpc#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "eventemitter3": "^3.1.0",
+    "flake-idgen": "^1.1.0",
+    "int64-buffer": "^0.1.10",
+    "pino": "^4.16.1",
+    "redis-fast-driver": "^2.1.2",
+    "statsd-client": "^0.4.2"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.20",
+    "@types/node": "^10.1.2",
+    "@types/pino": "^4.16.0",
+    "@types/statsd-client": "^0.4.0"
+  }
+}
