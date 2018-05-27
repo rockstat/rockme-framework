@@ -2,9 +2,9 @@
 import { MeterFacade } from "./meter";
 import { LoggerType } from "./log";
 import { RedisFactoryType } from "./redis";
+import { Logger } from "../log";
 
 // RPC
-
 
 export interface RPCRequestHandler {
   (arg: any): void;
@@ -79,7 +79,7 @@ export interface AgnosticRPCOptions {
   listen_direct: boolean;
   redisFactory: RedisFactoryType;
   channels: Array<string>;
-  log?: LoggerType;
+  log?: Logger;
   meter?: MeterFacade;
 }
 

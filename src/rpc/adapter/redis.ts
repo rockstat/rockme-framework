@@ -35,7 +35,7 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
       log
     } = options;
 
-    this.log = log ? log : new  StubLogger();
+    this.log = log ? log.for(this) : new  StubLogger();
     this.rsub = redisFactory.create();
 
     this.rsub.on('connect', () => {

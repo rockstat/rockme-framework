@@ -4,10 +4,10 @@ import { IdGenRoundCounter } from './round_counter';
 export class TheIds {
 
   sf: IdGenShowFlake;
-
   rpcCounter: IdGenRoundCounter;
 
   constructor(){
+    this.sf = new IdGenShowFlake();
     this.rpcCounter = new IdGenRoundCounter();
   }
 

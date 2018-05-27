@@ -27,4 +27,5 @@ export type LogLevels = {
 export interface LoggerMethods {
   logger?: any;
   child:  (options: LoggerConfig) => LoggerType;
+  for:  (fn: Object) => LoggerType;
 }

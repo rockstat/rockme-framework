@@ -6,5 +6,6 @@ export declare class StubLogger implements LoggerType {
     error: LogFn;
     trace: LogFn;
     fatal: LogFn;
+    for(fn: Function): LoggerType;
     child(options: LoggerConfig): LoggerType;
 }

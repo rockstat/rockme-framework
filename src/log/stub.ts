@@ -7,6 +7,9 @@ export class StubLogger implements LoggerType {
   error: LogFn = (...args: any[]) => { };
   trace: LogFn = (...args: any[]) => { };
   fatal: LogFn = (...args: any[]) => { };
+  for(fn: Function): LoggerType {
+    return new StubLogger();
+  }
   child(options: LoggerConfig): LoggerType {
     return new StubLogger();
   };

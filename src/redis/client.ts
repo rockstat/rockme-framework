@@ -16,7 +16,7 @@ export class RedisClient {
 
     const { log, meter, ...config } = options;
 
-    this.log = log ? log : new StubLogger();
+    this.log = log ? log.for(this) : new StubLogger();
     this.meter = meter ? meter : new StubMeter();
 
     const { host, port, db } = config;

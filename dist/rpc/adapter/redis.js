@@ -24,7 +24,7 @@ class RPCAdapterRedis extends EventEmitter {
         };
         this.options = options;
         const { redisFactory, channels, log } = options;
-        this.log = log ? log : new log_1.StubLogger();
+        this.log = log ? log.for(this) : new log_1.StubLogger();
         this.rsub = redisFactory.create();
         this.rsub.on('connect', () => {
             for (const chan of channels) {

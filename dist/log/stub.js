@@ -9,6 +9,9 @@ class StubLogger {
         this.trace = (...args) => { };
         this.fatal = (...args) => { };
     }
+    for(fn) {
+        return new StubLogger();
+    }
     child(options) {
         return new StubLogger();
     }
