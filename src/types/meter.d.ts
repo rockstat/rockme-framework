@@ -12,7 +12,7 @@ export interface StatsDUDPConfig extends StatsDClientConfig {
   ipv6?: boolean;
 }
 
-export interface MeterOptions {
+export interface MeterConfig {
   statsd?: StatsDUDPConfig
 }
 

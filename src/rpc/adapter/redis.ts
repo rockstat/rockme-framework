@@ -7,24 +7,13 @@ import * as EventEmitter from 'eventemitter3';
 import { RPCAdapter } from '../../types';
 import { StubLogger } from "../../log";
 
-type MsgReceiver = (data: any) => void;
-type ReceiverObject = {
-  dispatch: MsgReceiver
-}
-
 export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
 
+  options: AgnosticRPCOptions;
+  started: boolean;
   rsub: RedisClientType;
   rpub: RedisClientType;
-
-  options: AgnosticRPCOptions;
-
   log: LoggerType;
-  started: boolean;
-
-  // receiver: MsgReceiver = (data) => {
-  //   throw new Error('Adapter not attached');
-  // };
 
   constructor(options: AgnosticRPCOptions) {
     super();
@@ -47,10 +36,6 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
     this.rpub = redisFactory.create();
     this.log.info('started');
   }
-
-  // setReceiver<K extends keyof ReceiverObject>(obj: ReceiverObject, fname: K): void {
-  //   this.receiver = obj[fname];
-  // }
 
   private decode(raw: string): any {
     try {

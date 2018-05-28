@@ -1,7 +1,7 @@
-import { MeterOptions, MetricsCollector, MeterFacade } from '../types';
+import { MeterConfig, MetricsCollector, MeterFacade } from '../types';
 export declare class Meter implements MeterFacade {
     meters: MetricsCollector[];
-    constructor(options: MeterOptions);
+    constructor(options: MeterConfig);
     tick(metric: string, tags?: {
         [k: string]: string | number;
     }): void;

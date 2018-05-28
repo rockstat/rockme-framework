@@ -1,6 +1,6 @@
 import * as pino from 'pino';
 import { LogLevel, LogLevels, LogFn, LoggerType, LoggerConfig } from '../types';
-import { PinoConfig } from '@app/types';
+import { PinoConfig } from '../types';
 
 export class Logger implements LoggerType {
 

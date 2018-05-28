@@ -1,12 +1,12 @@
 {
-  "name": "rockmets",
-  "version": "1.0.0",
-  "description": "Agnostic JSON-RPC2 client/server implementation with addressing extension and library",
+  "name": "rock-me-ts",
+  "version": "1.1.0",
+  "description": "Package contains Agnostic JSON-RPC2 client/server implementation and other Rockstat requirements for microservice development",
   "main": "dist/index.js",
   "scripts": {
     "start": "ts-node-dev -r 'tsconfig-paths/register' ./src/start.ts | pino",
-    "build": "rimraf dist && tsc  -r 'source-map-support/register' -p tsconfig.json",
-    "prod": "node dist/start",
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "prod": "node dist/index",
     "clean": "rimraf dist",
     "lint": "tslint -c tslint.json -t stylish -p ./tsconfig.json",
     "security-check": "nsp check",
@@ -14,27 +14,39 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/madiedinro/agnostic-rpc.git"
+    "url": "git+https://github.com/rockstat/rock-me-ts.git"
   },
   "author": "Dmitry Rodin <madiedinro@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/madiedinro/agnostic-rpc/issues"
+    "url": "https://github.com/rockstat/rock-me-ts/issues"
   },
-  "homepage": "https://github.com/madiedinro/agnostic-rpc#readme",
+  "homepage": "https://rstat.org",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "dotenv": "^5.0.1",
+    "ejs": "^2.6.1",
     "eventemitter3": "^3.1.0",
     "flake-idgen": "^1.1.0",
+    "glob": "^7.1.2",
     "int64-buffer": "^0.1.10",
+    "js-yaml": "^3.11.0",
+    "merge-options": "^1.0.1",
     "pino": "^4.16.1",
     "redis-fast-driver": "^2.1.2",
     "statsd-client": "^0.4.2"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.20",
+    "@types/dotenv": "^4.0.3",
+    "@types/ejs": "^2.5.1",
+    "@types/glob": "^5.0.35",
+    "@types/js-yaml": "^3.11.1",
     "@types/node": "^10.1.2",
     "@types/pino": "^4.16.0",
-    "@types/statsd-client": "^0.4.0"
+    "@types/statsd-client": "^0.4.0",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.6",
+    "tsconfig-paths": "^3.3.2"
   }
 }

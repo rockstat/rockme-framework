@@ -72,11 +72,14 @@ export interface RPCWaitingCall {
 
 export type RPCWaitingCalls = { [k: string]: RPCWaitingCall | undefined };
 
-
-export interface AgnosticRPCOptions {
+export interface RPCConfig {
   name: string;
   listen_all: boolean;
   listen_direct: boolean;
+}
+
+
+export interface AgnosticRPCOptions extends RPCConfig {
   redisFactory: RedisFactoryType;
   channels: Array<string>;
   log?: Logger;

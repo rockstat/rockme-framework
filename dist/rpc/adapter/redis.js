@@ -3,9 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const EventEmitter = require("eventemitter3");
 const log_1 = require("../../log");
 class RPCAdapterRedis extends EventEmitter {
-    // receiver: MsgReceiver = (data) => {
-    //   throw new Error('Adapter not attached');
-    // };
     constructor(options) {
         super();
         this.redisMsg = (redismsg) => {
@@ -34,9 +31,6 @@ class RPCAdapterRedis extends EventEmitter {
         this.rpub = redisFactory.create();
         this.log.info('started');
     }
-    // setReceiver<K extends keyof ReceiverObject>(obj: ReceiverObject, fname: K): void {
-    //   this.receiver = obj[fname];
-    // }
     decode(raw) {
         try {
             return JSON.parse(raw);

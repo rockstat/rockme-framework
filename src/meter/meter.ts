@@ -1,10 +1,10 @@
-import { MeterOptions, MetricsCollector, MeterFacade } from '../types';
+import { MeterConfig, MetricsCollector, MeterFacade } from '../types';
 import { StatsdMeter } from './statsd';
 
 export class Meter implements MeterFacade {
   meters: MetricsCollector[] = [];
 
-  constructor(options: MeterOptions) {
+  constructor(options: MeterConfig) {
     if(options.statsd){
       this.meters.push(new StatsdMeter(options.statsd));
     }
