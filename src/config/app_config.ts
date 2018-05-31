@@ -54,10 +54,6 @@ export class AppConfig<T> {
     return this.config[section];
   }
 
-  // get<S extends keyof Config>(section: S): Config[S] {
-  //   return this.config[section];
-  // }
-
   isDev(): boolean {
     return this.env === ENV_DEV;
   }

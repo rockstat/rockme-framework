@@ -24,6 +24,7 @@
   "homepage": "https://rstat.org",
   "dependencies": {
     "bluebird": "^3.5.1",
+    "cctz": "^1.7.7",
     "dotenv": "^5.0.1",
     "ejs": "^2.6.1",
     "eventemitter3": "^3.1.0",
