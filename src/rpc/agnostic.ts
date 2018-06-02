@@ -69,7 +69,7 @@ export class RPCAgnostic {
       }
     }
     // Handling request
-    if ('method' in msg && msg.method !== undefined && msg.to && msg.params !== undefined) {
+    if ('method' in msg && msg.method !== undefined && msg.to && msg.params !== undefined && msg.method in this.methods) {
       this.dispatchRequest(msg).then(res => {
         if (res) {
           this.publish(res);
