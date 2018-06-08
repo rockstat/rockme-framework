@@ -11,11 +11,11 @@ import {
 } from './constants';
 import {
   ConfigRoot,
+  AppConfigOptions,
   ImplicitConfig,
-  RedisConfig,
-  AppConfigOptions
+  AbstractConfig
 } from '../types';
-import { Envs, LoggerConfig, MeterConfig, RPCConfig } from '../types';
+import { Envs } from '../types';
 
 dotenv.config();
 dotenv.config({ path: '.env.local' });
@@ -23,7 +23,7 @@ dotenv.config({ path: '.env.local' });
 export class AppConfig<T> {
 
   configDir: string = './config';
-  config: ConfigRoot;
+  config: AbstractConfig<T>;
   env: Envs;
   ejsConfig: EjsOptions = {}
 
@@ -41,17 +41,22 @@ export class AppConfig<T> {
    * Reading all accessible configuration files including custom
    */
   constructor(options: AppConfigOptions = {}) {
-    const parts = globSync(`${this.configDir}/**/*.yml`, { nosort: true })
-      .map(file => readFileSync(file).toString());
-
-    const yaml = ejsRender(parts.join('\n'), { env: process.env, ...(options.vars || {}) }, this.ejsConfig);
-
-    this.config = mergeOptions({}, ...<object[]>safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined));
+    this.config = this.load(options);
     this.env = this.config.env = AppConfig.env;
   }
 
-  get<K extends keyof N, N extends T & ConfigRoot>(section: K): N[K] {
-    return this.config[section];
+  load(options: AppConfigOptions): AbstractConfig<T> {
+    const parts = globSync(
+      `${this.configDir}/**/*.yml`, { nosort: true }
+    ).map(file => readFileSync(file).toString());
+
+    const yaml = ejsRender(parts.join('\n'), { env: process.env, ...(options.vars || {}) }, this.ejsConfig);
+
+    return mergeOptions({}, ...<object[]>safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined));
+  }
+
+  get<K extends keyof AbstractConfig<T>>(section: K): AbstractConfig<T>[K] {
+    return this.config[section]
   }
 
   isDev(): boolean {

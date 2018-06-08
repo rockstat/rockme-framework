@@ -16,10 +16,7 @@ class AppConfig {
     constructor(options = {}) {
         this.configDir = './config';
         this.ejsConfig = {};
-        const parts = glob_1.sync(`${this.configDir}/**/*.yml`, { nosort: true })
-            .map(file => fs_1.readFileSync(file).toString());
-        const yaml = ejs_1.render(parts.join('\n'), { env: process.env, ...(options.vars || {}) }, this.ejsConfig);
-        this.config = mergeOptions({}, ...js_yaml_1.safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined));
+        this.config = this.load(options);
         this.env = this.config.env = AppConfig.env;
     }
     get identify() { return this.get('identify'); }
@@ -31,6 +28,11 @@ class AppConfig {
     get client() { return this.get('client'); }
     get meter() { return this.get('metrics'); }
     get rpc() { return this.get('rpc'); }
+    load(options) {
+        const parts = glob_1.sync(`${this.configDir}/**/*.yml`, { nosort: true }).map(file => fs_1.readFileSync(file).toString());
+        const yaml = ejs_1.render(parts.join('\n'), { env: process.env, ...(options.vars || {}) }, this.ejsConfig);
+        return mergeOptions({}, ...js_yaml_1.safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined));
+    }
     get(section) {
         return this.config[section];
     }

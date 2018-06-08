@@ -1,41 +1,26 @@
 import { Options as EjsOptions } from 'ejs';
-import { ConfigRoot, ImplicitConfig, AppConfigOptions } from '../types';
+import { AppConfigOptions, AbstractConfig } from '../types';
 import { Envs } from '../types';
 export declare class AppConfig<T> {
     configDir: string;
-    config: ConfigRoot;
+    config: AbstractConfig<T>;
     env: Envs;
     ejsConfig: EjsOptions;
-    readonly identify: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["identify"];
-    readonly http: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["http"];
-    readonly ws: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["websocket"];
-    readonly log: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["log"];
+    readonly identify: AbstractConfig<T>["identify"];
+    readonly http: AbstractConfig<T>["http"];
+    readonly ws: AbstractConfig<T>["websocket"];
+    readonly log: AbstractConfig<T>["log"];
     readonly static: any;
-    readonly redis: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["redis"];
-    readonly client: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["client"];
-    readonly meter: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["metrics"];
-    readonly rpc: (T & ImplicitConfig & {
-        [k: string]: any;
-    })["rpc"];
+    readonly redis: AbstractConfig<T>["redis"];
+    readonly client: AbstractConfig<T>["client"];
+    readonly meter: AbstractConfig<T>["metrics"];
+    readonly rpc: AbstractConfig<T>["rpc"];
     /**
      * Reading all accessible configuration files including custom
      */
     constructor(options?: AppConfigOptions);
-    get<K extends keyof N, N extends T & ConfigRoot>(section: K): N[K];
+    load(options: AppConfigOptions): AbstractConfig<T>;
+    get<K extends keyof AbstractConfig<T>>(section: K): AbstractConfig<T>[K];
     isDev(): boolean;
     isProd(): boolean;
     static readonly env: Envs;

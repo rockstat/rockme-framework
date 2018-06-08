@@ -5,7 +5,12 @@ import { RedisConfig } from './redis'
 import { LoggerConfig } from './log'
 import { MeterConfig } from './meter';
 
-export type ConfigRoot = ImplicitConfig & { [k: string]: any };
+export type AnyConfig = { [k: string]: any };
+
+
+export type AbstractConfig<T> = T & ImplicitConfig & AnyConfig;
+
+export type ConfigRoot = ImplicitConfig & AnyConfig;
 
 export interface ImplicitConfig {
   env: Envs;
