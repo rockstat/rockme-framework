@@ -13,10 +13,9 @@ import {
   ConfigRoot,
   AppConfigOptions,
   ImplicitConfig,
-  AbstractConfig
+  AbstractConfig,
+  Envs
 } from '../types';
-import { Envs } from '../types';
-
 dotenv.config();
 dotenv.config({ path: '.env.local' });
 

@@ -1,6 +1,5 @@
 import { Options as EjsOptions } from 'ejs';
-import { AppConfigOptions, AbstractConfig } from '../types';
-import { Envs } from '../types';
+import { AppConfigOptions, AbstractConfig, Envs } from '../types';
 export declare class AppConfig<T> {
     configDir: string;
     config: AbstractConfig<T>;
