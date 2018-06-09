@@ -2,7 +2,12 @@
   "name": "rock-me-ts",
   "version": "1.2.0",
   "description": "Package contains Agnostic JSON-RPC2 client/server implementation and other Rockstat requirements for microservice development",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
+  "private": true,
+  "typings": "./dist/index.d.ts",
+  "engines": {
+    "node": ">=9"
+  },
   "scripts": {
     "start": "ts-node-dev -r 'tsconfig-paths/register' ./src/start.ts | pino",
     "build": "rimraf dist && tsc -p tsconfig.json",
@@ -17,7 +22,7 @@
     "url": "git+https://github.com/rockstat/rock-me-ts.git"
   },
   "author": "Dmitry Rodin <madiedinro@gmail.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/rockstat/rock-me-ts/issues"
   },
@@ -25,7 +30,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "cctz": "^1.7.7",
-    "dotenv": "^5.0.1",
+    "dotenv": "^6.0.0",
     "ejs": "^2.6.1",
     "eventemitter3": "^3.1.0",
     "flake-idgen": "^1.1.0",
@@ -43,11 +48,12 @@
     "@types/ejs": "^2.5.1",
     "@types/glob": "^5.0.35",
     "@types/js-yaml": "^3.11.1",
-    "@types/node": "^10.1.2",
+    "@types/node": "9.6.18",
     "@types/pino": "^4.16.0",
     "@types/statsd-client": "^0.4.0",
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.6",
-    "tsconfig-paths": "^3.3.2"
+    "tsconfig-paths": "^3.3.2",
+    "typescript": "^2.9.1"
   }
 }

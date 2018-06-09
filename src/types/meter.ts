@@ -23,6 +23,6 @@ export interface MetricsCollector {
 }
 
 
-interface MeterFacade extends MetricsCollector {
+export interface MeterFacade extends MetricsCollector {
   timenote(metric: string, tags?: { [k: string]: string | number }): () => number;
 }

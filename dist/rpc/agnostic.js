@@ -40,7 +40,6 @@ class RPCAgnostic {
                 msg.from = names[2];
             }
         }
-        // Handling request
         if ('method' in msg && msg.method !== undefined && msg.to && msg.params !== undefined && msg.method in this.methods) {
             this.dispatchRequest(msg).then(res => {
                 if (res) {
@@ -48,7 +47,6 @@ class RPCAgnostic {
                 }
             });
         }
-        // Handling response
         else if ('id' in msg && msg.id !== undefined && ('result' in msg || 'error' in msg)) {
             this.dispatchResponse(msg);
         }

@@ -9,5 +9,4 @@ __export(require("./rpc"));
 __export(require("./log"));
 __export(require("./redis"));
 __export(require("./config"));
-// export * from './runner';
 //# sourceMappingURL=index.js.map

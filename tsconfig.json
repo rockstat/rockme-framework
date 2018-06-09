@@ -8,12 +8,15 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "pretty": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
     "allowUnreachableCode": true,
     "noFallthroughCasesInSwitch": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "declaration": true,
+    "declarationMap": false,
     "outDir": "./dist/",
     "typeRoots": [
       "node_modules/@types",
@@ -29,6 +32,5 @@
   ],
   "exclude": [
     "node_modules"
-  ],
-  "compileOnSave": true
+  ]
 }

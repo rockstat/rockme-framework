@@ -8,8 +8,8 @@ export declare class RPCAdapterRedis extends EventEmitter implements RPCAdapter 
     rpub: RedisClientType;
     log: LoggerType;
     constructor(options: AgnosticRPCOptions);
-    private decode(raw);
-    private encode(data);
+    private decode;
+    private encode;
     send(to: string, msg: any): void;
     redisMsg: (redismsg: string[]) => void;
 }

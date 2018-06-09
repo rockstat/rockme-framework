@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { safeLoadAll } from 'js-yaml';
-import { render as ejsRender, Options as EjsOptions } from 'ejs';
+import { render as ejsRender } from 'ejs';
 import { sync as globSync } from 'glob';
 import * as dotenv from 'dotenv';
 import * as mergeOptions from 'merge-options';
@@ -24,7 +24,6 @@ export class AppConfig<T> {
   configDir: string = './config';
   config: AbstractConfig<T>;
   env: Envs;
-  ejsConfig: EjsOptions = {}
 
   get identify() { return this.get('identify'); }
   get http() { return this.get('http'); }
@@ -48,10 +47,13 @@ export class AppConfig<T> {
     const parts = globSync(
       `${this.configDir}/**/*.yml`, { nosort: true }
     ).map(file => readFileSync(file).toString());
-
-    const yaml = ejsRender(parts.join('\n'), { env: process.env, ...(options.vars || {}) }, this.ejsConfig);
-
-    return mergeOptions({}, ...<object[]>safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined));
+    const tmplData = {
+      env: process.env,
+      ...(options.vars || {})
+    }
+    const yaml = ejsRender(parts.join('\n'), tmplData, { async: false });
+    const docs = safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined)
+    return mergeOptions({}, ...<object[]>docs);
   }
 
   get<K extends keyof AbstractConfig<T>>(section: K): AbstractConfig<T>[K] {

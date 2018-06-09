@@ -15,11 +15,9 @@ class RedisClient {
         const { host, port, db } = config;
         this.log.info('Starting redis client. Server: %s:%s/%d', host, port, db);
         this.client = new Redis(config);
-        //happen only once
         this.client.on('ready', () => {
             this.log.info('redis ready');
         });
-        //happen each time when reconnected
         this.client.on('connect', () => {
             this.log.info('redis connected');
         });
@@ -32,7 +30,6 @@ class RedisClient {
         this.client.on('error', (e) => {
             this.log.info('redis error', e);
         });
-        // called on an explicit end, or exhausted reconnections
         this.client.on('end', () => {
             this.log.info('redis closed');
         });

@@ -1,4 +1,3 @@
-/// <reference types="statsd-client" />
 import * as StatsdClient from 'statsd-client';
 import { MetricsCollector, StatsDUDPConfig } from '../types';
 export declare class StatsdMeter implements MetricsCollector {

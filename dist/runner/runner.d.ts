@@ -31,8 +31,5 @@ export declare class AppRunner<T> {
     rpc: RPCAgnostic;
     appStarted: Date;
     constructor();
-    /**
-     * Required remote functuins
-     */
     setup(): Promise<void>;
 }

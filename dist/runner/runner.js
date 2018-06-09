@@ -23,13 +23,8 @@ class AppRunner {
         this.name = this.config.rpc.name;
         this.log.info('Starting service');
     }
-    /**
-     * Required remote functuins
-     */
     async setup() {
-        // setup Redis
         const redisFactory = this.deps.redisFactory = new redis_1.RedisFactory({ log: this.log, meter: this.meter, ...this.config.redis });
-        // Setup RPC
         const channels = [];
         if (this.config.rpc.listen_all) {
             channels.push(rpc_1.BROADCAST);

@@ -1,4 +1,3 @@
-/// <reference types="pino" />
 import * as pino from 'pino';
 import { LogLevel, LogFn, LoggerType, LoggerConfig } from '../types';
 export declare class Logger implements LoggerType {

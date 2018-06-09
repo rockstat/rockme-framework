@@ -10,12 +10,8 @@ const constants_1 = require("./constants");
 dotenv.config();
 dotenv.config({ path: '.env.local' });
 class AppConfig {
-    /**
-     * Reading all accessible configuration files including custom
-     */
     constructor(options = {}) {
         this.configDir = './config';
-        this.ejsConfig = {};
         this.config = this.load(options);
         this.env = this.config.env = AppConfig.env;
     }
@@ -30,8 +26,13 @@ class AppConfig {
     get rpc() { return this.get('rpc'); }
     load(options) {
         const parts = glob_1.sync(`${this.configDir}/**/*.yml`, { nosort: true }).map(file => fs_1.readFileSync(file).toString());
-        const yaml = ejs_1.render(parts.join('\n'), { env: process.env, ...(options.vars || {}) }, this.ejsConfig);
-        return mergeOptions({}, ...js_yaml_1.safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined));
+        const tmplData = {
+            env: process.env,
+            ...(options.vars || {})
+        };
+        const yaml = ejs_1.render(parts.join('\n'), tmplData, { async: false });
+        const docs = js_yaml_1.safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined);
+        return mergeOptions({}, ...docs);
     }
     get(section) {
         return this.config[section];

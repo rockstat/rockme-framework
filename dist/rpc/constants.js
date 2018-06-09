@@ -6,6 +6,5 @@ exports.SERVICE_TRACK = 'track';
 exports.METHOD_IAMALIVE = '__iamalive';
 exports.METHOD_STATUS = '__status';
 exports.BROADCAST = 'broadcast';
-// ### Orchastration
 exports.STATUS_RUNNING = 'running';
 //# sourceMappingURL=constants.js.map

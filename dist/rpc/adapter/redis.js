@@ -11,7 +11,6 @@ class RPCAdapterRedis extends EventEmitter {
                 this.log.debug('\n --> ', raw);
                 const msg = this.decode(raw);
                 if (msg && msg.jsonrpc === '2.0') {
-                    // this.receiver(msg);
                     this.emit('message', msg);
                 }
             }

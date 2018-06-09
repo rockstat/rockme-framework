@@ -1,4 +1,3 @@
-/// <reference types="redis-fast-driver" />
 import * as Redis from 'redis-fast-driver';
 import { RedisConfig, LoggerType, RedisClientOptions, MeterFacade } from '../types';
 export declare class RedisClient {

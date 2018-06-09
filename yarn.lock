@@ -26,23 +26,24 @@
     "@types/node" "*"
 
 "@types/ejs@^2.5.1":
-  version "2.5.1"
-  resolved "https://registry.yarnpkg.com/@types/ejs/-/ejs-2.5.1.tgz#cd9a5392c00ebba94cb6fe85022c5621e50b4dec"
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@types/ejs/-/ejs-2.6.0.tgz#56502bca6e2e1b4cf9351918ca76cdaa93fe3b6c"
 
 "@types/events@*":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
 
 "@types/express-serve-static-core@*":
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.11.1.tgz#f6f7212382d59b19d696677bcaa48a37280f5d45"
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.16.0.tgz#fdfe777594ddc1fe8eb8eccce52e261b496e43e7"
   dependencies:
     "@types/events" "*"
     "@types/node" "*"
+    "@types/range-parser" "*"
 
 "@types/express@*":
-  version "4.11.1"
-  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.11.1.tgz#f99663b3ab32d04cb11db612ef5dd7933f75465b"
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.0.tgz#6d8bc42ccaa6f35cf29a2b7c3333cb47b5a32a19"
   dependencies:
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
@@ -68,9 +69,13 @@
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
 
-"@types/node@*", "@types/node@^10.1.2":
-  version "10.1.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.1.2.tgz#1b928a0baa408fc8ae3ac012cc81375addc147c6"
+"@types/node@*":
+  version "10.3.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.2.tgz#3840ec6c12556fdda6e0e6d036df853101d732a4"
+
+"@types/node@9.6.18":
+  version "9.6.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.18.tgz#092e13ef64c47e986802c9c45a61c1454813b31d"
 
 "@types/pino@^4.16.0":
   version "4.16.0"
@@ -78,6 +83,10 @@
   dependencies:
     "@types/events" "*"
     "@types/node" "*"
+
+"@types/range-parser@*":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.2.tgz#fa8e1ad1d474688a757140c91de6dace6f4abc8d"
 
 "@types/serve-static@*":
   version "1.13.2"
@@ -124,8 +133,8 @@ brace-expansion@^1.1.7:
     concat-map "0.0.1"
 
 buffer-from@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.0.0.tgz#4cb8832d23612589b0406e9e2956c17f06fdf531"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.0.tgz#87fcaa3a298358e0ade6e442cfce840740d1ad04"
 
 cctz@^1.7.7:
   version "1.7.7"
@@ -134,7 +143,7 @@ cctz@^1.7.7:
     bindings "^1.2.1"
     nan "^2.4.0"
 
-chalk@^2.3.2:
+chalk@^2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
   dependencies:
@@ -161,12 +170,12 @@ core-util-is@~1.0.0:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
 deepmerge@^2.0.1:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.1.0.tgz#511a54fff405fc346f0240bb270a3e9533a31102"
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.1.1.tgz#e862b4e45ea0555072bf51e7fd0d9845170ae768"
 
-dotenv@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-5.0.1.tgz#a5317459bd3d79ab88cff6e44057a6a3fbb1fcef"
+dotenv@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.0.0.tgz#24e37c041741c5f4b25324958ebbc34bca965935"
 
 ejs@^2.6.1:
   version "2.6.1"
@@ -203,8 +212,8 @@ flake-idgen@^1.1.0:
   resolved "https://registry.yarnpkg.com/flake-idgen/-/flake-idgen-1.1.0.tgz#282c3ab567dfb486ed8be7ba62b12117661e843d"
 
 flatstr@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/flatstr/-/flatstr-1.0.5.tgz#5b451b08cbd48e2eac54a2bbe0bf46165aa14be3"
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/flatstr/-/flatstr-1.0.8.tgz#0e849229751f2b9f6a0919f8e81e1229e84ba901"
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -249,8 +258,8 @@ isarray@~1.0.0:
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
 
 js-yaml@^3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.11.0.tgz#597c1a8bd57152f26d622ce4117851a51f5ebaef"
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.12.0.tgz#eaed656ec8344f10f527c6bfa1b6e2244de167d1"
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
@@ -286,14 +295,14 @@ path-is-absolute@^1.0.0:
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
 
 pino-std-serializers@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-2.0.0.tgz#63cbacf34bed8c95dd2c67eec824e48b8dd3445f"
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-2.1.0.tgz#01953dcaecd5f43b331ecf2e312a49c9fd64851c"
 
 pino@^4.16.1:
-  version "4.16.1"
-  resolved "https://registry.yarnpkg.com/pino/-/pino-4.16.1.tgz#8bcb6b685ee4d4e26adfe79a05f12f6b46962d40"
+  version "4.17.3"
+  resolved "https://registry.yarnpkg.com/pino/-/pino-4.17.3.tgz#3536ea36f6258356ba8891d18dbf1afed41fcf09"
   dependencies:
-    chalk "^2.3.2"
+    chalk "^2.4.1"
     fast-json-parse "^1.0.3"
     fast-safe-stringify "^1.2.3"
     flatstr "^1.0.5"
@@ -407,6 +416,10 @@ tsconfig-paths@^3.3.2:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
     strip-json-comments "^2.0.1"
+
+typescript@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.1.tgz#fdb19d2c67a15d11995fd15640e373e09ab09961"
 
 util-deprecate@~1.0.1:
   version "1.0.2"
