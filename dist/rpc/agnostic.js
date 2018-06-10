@@ -7,7 +7,7 @@ const RPC20 = '2.0';
 class RPCAgnostic {
     constructor(options) {
         this.started = false;
-        this.timeout = 2000;
+        this.timeout = 500;
         this.queue = {};
         this.methods = {};
         const { name, listen_all, listen_direct, log, meter } = options;
@@ -51,21 +51,44 @@ class RPCAgnostic {
             this.dispatchResponse(msg);
         }
     }
+    resolve(id, result, call) {
+        if (call.resolve && result) {
+            call.timing();
+            call.resolve(result);
+        }
+    }
+    cleanWaiter(id, call) {
+        if (call.timeout) {
+            clearTimeout(call.timeout);
+        }
+        this.queue[id] = undefined;
+    }
     async dispatchResponse(msg) {
         const call = this.queue[msg.id];
         if (call) {
-            if (call.timeout) {
-                clearTimeout(call.timeout);
+            if (call.multi) {
+                const idx = call.services.indexOf(msg.from);
+                if (idx >= 0) {
+                    call.services.splice(idx, 1);
+                }
+                if ('result' in msg) {
+                    call.bag[msg.from] = msg.result;
+                    if (call.services.length === 0 && call.resolve) {
+                        this.resolve(msg.id, call.bag, call);
+                        this.cleanWaiter(msg.id, call);
+                    }
+                }
             }
-            if ('result' in msg && call.resolve) {
-                call.timing();
-                call.resolve(msg.result);
+            else {
+                if ('result' in msg && call.resolve) {
+                    this.resolve(msg.id, msg.result, call);
+                }
+                if ('error' in msg && call.reject) {
+                    this.meter.tick('rpc.error');
+                    call.reject(msg.error);
+                }
+                this.cleanWaiter(msg.id, call);
             }
-            if ('error' in msg && call.reject) {
-                this.meter.tick('rpc.error');
-                call.reject(msg.error);
-            }
-            this.queue[msg.id] = undefined;
         }
     }
     async dispatchRequest(msg) {
@@ -97,13 +120,13 @@ class RPCAgnostic {
         };
         this.publish(msg);
     }
-    request(service, method, params = null) {
+    request(target, method, params = null, services = []) {
         return new Promise((resolve, reject) => {
             const id = this.ids.round();
             const msg = {
                 jsonrpc: RPC20,
                 from: this.name,
-                to: service,
+                to: target,
                 id: id,
                 method: method,
                 params: params || null
@@ -111,12 +134,20 @@ class RPCAgnostic {
             this.queue[id] = {
                 resolve,
                 reject,
-                timing: this.meter.timenote('rpc.request', { service, method }),
+                bag: {},
+                multi: services.length > 0,
+                services: services,
+                timing: this.meter.timenote('rpc.request', { target, method }),
                 timeout: setTimeout(() => {
                     const call = this.queue[id];
                     if (call) {
                         this.queue[id] = undefined;
-                        call.reject(new Error('Reuest timeout'));
+                        if (call.multi) {
+                            call.resolve(call.bag);
+                        }
+                        else {
+                            call.reject(new Error('Reuest timeout'));
+                        }
                     }
                 }, this.timeout)
             };

@@ -1,6 +1,6 @@
 import { reject, method } from "bluebird";
 import { TheIds } from "../ids";
-import { RPCAdapter } from "../types"
+import { RPCAdapter, RPCWaitingCall } from "../types"
 import { StubLogger } from '../log'
 import { StubMeter } from '../meter'
 
@@ -24,7 +24,7 @@ export class RPCAgnostic {
   ids: TheIds;
   meter: MeterFacade;
   started: boolean = false;
-  timeout: number = 2000;
+  timeout: number = 500;
   log: LoggerType;
   queue: RPCWaitingCalls = {};
   methods: RpcMethods = {};
@@ -82,21 +82,60 @@ export class RPCAgnostic {
     }
   }
 
+  /**
+   * Resolve waiting waiter
+   * @param id
+   * @param result
+   * @param call
+   */
+  resolve(id: string, result: any, call: RPCWaitingCall) {
+    if (call.resolve && result) {
+      call.timing();
+      call.resolve(result);
+    }
+  }
+
+  /**
+   * Cleaning request state
+   * @param id RPC request ID
+   * @param call waiter state struct
+   */
+  cleanWaiter(id: string, call: RPCWaitingCall) {
+    if (call.timeout) {
+      clearTimeout(call.timeout)
+    }
+    this.queue[id] = undefined;
+  }
+
   async dispatchResponse(msg: RPCResponse | RPCResponseError): Promise<void> {
     const call = this.queue[msg.id];
     if (call) {
-      if (call.timeout) {
-        clearTimeout(call.timeout)
+      // handling multi-destination request
+      if (call.multi) {
+        const idx = call.services.indexOf(msg.from);
+        if (idx >= 0) {
+          call.services.splice(idx, 1)
+        }
+        if ('result' in msg) {
+          call.bag[msg.from] = msg.result;
+          // complete
+          if (call.services.length === 0 && call.resolve) {
+            this.resolve(msg.id, call.bag, call);
+            this.cleanWaiter(msg.id, call)
+          }
+        }
       }
-      if ('result' in msg && call.resolve) {
-        call.timing();
-        call.resolve(msg.result);
+      // single requests
+      else {
+        if ('result' in msg && call.resolve) {
+          this.resolve(msg.id, msg.result, call);
+        }
+        if ('error' in msg && call.reject) {
+          this.meter.tick('rpc.error')
+          call.reject(msg.error);
+        }
+        this.cleanWaiter(msg.id, call)
       }
-      if ('error' in msg && call.reject) {
-        this.meter.tick('rpc.error')
-        call.reject(msg.error);
-      }
-      this.queue[msg.id] = undefined;
     }
   }
 
@@ -130,13 +169,13 @@ export class RPCAgnostic {
     this.publish(msg)
   }
 
-  request<T>(service: string, method: string, params: RPCRequestParams = null): Promise<T> {
+  request<T>(target: string, method: string, params: RPCRequestParams = null, services: string[] = []): Promise<T> {
     return new Promise<any>((resolve, reject) => {
       const id = this.ids.round();
       const msg: RPCRequest = {
         jsonrpc: RPC20,
         from: this.name,
-        to: service,
+        to: target,
         id: id,
         method: method,
         params: params || null
@@ -144,12 +183,20 @@ export class RPCAgnostic {
       this.queue[id] = {
         resolve,
         reject,
-        timing: this.meter.timenote('rpc.request', { service, method }),
+        bag: {},
+        multi: services.length > 0,
+        services: services,
+        timing: this.meter.timenote('rpc.request', { target, method }),
         timeout: setTimeout(() => {
           const call = this.queue[id];
           if (call) {
             this.queue[id] = undefined;
-            call.reject(new Error('Reuest timeout'));
+            if (call.multi) {
+              call.resolve(call.bag);
+            }
+            else {
+              call.reject(new Error('Reuest timeout'));
+            }
           }
         }, this.timeout)
       };

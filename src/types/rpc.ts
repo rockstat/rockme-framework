@@ -68,6 +68,9 @@ export interface RPCWaitingCall {
   reject: (reason?: any) => void;
   timing: Function;
   timeout: NodeJS.Timer;
+  multi: boolean;
+  bag: { [k: string]: any };
+  services: string[];
 }
 
 export type RPCWaitingCalls = { [k: string]: RPCWaitingCall | undefined };
