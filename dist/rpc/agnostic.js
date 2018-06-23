@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ids_1 = require("../ids");
 const log_1 = require("../log");
 const meter_1 = require("../meter");
+const cache_1 = require("./cache");
 const RPC20 = '2.0';
 class RPCAgnostic {
     constructor(options) {
@@ -17,6 +18,7 @@ class RPCAgnostic {
         this.listen_direct = listen_direct;
         this.log = log ? log : new log_1.StubLogger();
         this.meter = meter ? meter : new meter_1.StubMeter();
+        this.cache = new cache_1.RPCCache();
     }
     setup(adapter) {
         this.adapter = adapter;
@@ -138,6 +140,7 @@ class RPCAgnostic {
                 multi: services.length > 0,
                 services: services,
                 timing: this.meter.timenote('rpc.request', { target, method }),
+                params: params,
                 timeout: setTimeout(() => {
                     const call = this.queue[id];
                     if (call) {

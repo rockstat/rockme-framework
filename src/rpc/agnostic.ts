@@ -16,6 +16,7 @@ import {
   MeterFacade,
   RequestHandler
 } from "../types";
+import { RPCCache } from "./cache";
 
 const RPC20 = '2.0';
 
@@ -32,6 +33,7 @@ export class RPCAgnostic {
   listen_direct: boolean;
   listen_all: boolean;
   name: string;
+  cache: RPCCache;
 
   constructor(options: AgnosticRPCOptions) {
     const { name, listen_all, listen_direct, log, meter } = options;
@@ -41,6 +43,7 @@ export class RPCAgnostic {
     this.listen_direct = listen_direct;
     this.log = log ? log : new StubLogger();
     this.meter = meter ? meter : new StubMeter();
+    this.cache = new RPCCache();
   }
 
   setup(adapter: RPCAdapter) {
@@ -187,6 +190,7 @@ export class RPCAgnostic {
         multi: services.length > 0,
         services: services,
         timing: this.meter.timenote('rpc.request', { target, method }),
+        params: params,
         timeout: setTimeout(() => {
           const call = this.queue[id];
           if (call) {

@@ -50,6 +50,7 @@ export interface RPCRequest extends RPCBase {
 export interface RPCResponse extends RPCBase {
   id: string;
   result: any;
+  cache?: number;
 }
 
 export interface RPCErrorDetails {
@@ -68,6 +69,7 @@ export interface RPCWaitingCall {
   reject: (reason?: any) => void;
   timing: Function;
   timeout: NodeJS.Timer;
+  params: RPCRequestParams;
   multi: boolean;
   bag: { [k: string]: any };
   services: string[];
