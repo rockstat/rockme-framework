@@ -23,7 +23,7 @@ export declare class RPCAgnostic {
     cleanWaiter(id: string, call: RPCWaitingCall): void;
     dispatchResponse(msg: RPCResponse | RPCResponseError): Promise<void>;
     dispatchRequest(msg: RPCRequest): Promise<RPCResponse | RPCResponseError | undefined>;
-    notify(service: string, method: string, params?: RPCRequestParams): void;
+    notify(target: string, method: string, params?: RPCRequestParams): void;
     request<T>(target: string, method: string, params?: RPCRequestParams, services?: string[]): Promise<T>;
     register<T>(method: string, func: RequestHandler<T>): void;
     wrapError(msg: RPCRequest, error: Error, code?: number): RPCResponseError | undefined;

@@ -127,6 +127,7 @@ export class RPCAgnostic {
             this.cleanWaiter(msg.id, call)
           }
         }
+
       }
       // single requests
       else {
@@ -161,20 +162,26 @@ export class RPCAgnostic {
     }
   }
 
-  notify(service: string, method: string, params: RPCRequestParams = null): void {
+  notify(target: string, method: string, params: RPCRequestParams = null): void {
     const msg: RPCRequest = {
       jsonrpc: RPC20,
       from: this.name,
-      to: service,
+      to: target,
       method: method,
       params: params
     }
     this.publish(msg)
   }
 
-  request<T>(target: string, method: string, params: RPCRequestParams = null, services: string[] = []): Promise<T> {
+  request<T>(target: string, method: string, params: RPCRequestParams = null, services?: string[]): Promise<T> {
     return new Promise<any>((resolve, reject) => {
       const id = this.ids.round();
+      // if destination services is empty do not send request
+      if (services !== undefined && services.length == 0) {
+        return resolve();
+      }
+      // fill services for simple request
+      services = services || [target];
       const msg: RPCRequest = {
         jsonrpc: RPC20,
         from: this.name,

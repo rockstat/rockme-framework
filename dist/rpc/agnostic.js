@@ -72,12 +72,12 @@ class RPCAgnostic {
                 const idx = call.services.indexOf(msg.from);
                 if (idx >= 0) {
                     call.services.splice(idx, 1);
-                }
-                if ('result' in msg) {
-                    call.bag[msg.from] = msg.result;
-                    if (call.services.length === 0 && call.resolve) {
-                        this.resolve(msg.id, call.bag, call);
-                        this.cleanWaiter(msg.id, call);
+                    if ('result' in msg) {
+                        call.bag[msg.from] = msg.result;
+                        if (call.services.length === 0 && call.resolve) {
+                            this.resolve(msg.id, call.bag, call);
+                            this.cleanWaiter(msg.id, call);
+                        }
                     }
                 }
             }
@@ -112,19 +112,23 @@ class RPCAgnostic {
             this.log.error('handler exec error', error);
         }
     }
-    notify(service, method, params = null) {
+    notify(target, method, params = null) {
         const msg = {
             jsonrpc: RPC20,
             from: this.name,
-            to: service,
+            to: target,
             method: method,
             params: params
         };
         this.publish(msg);
     }
-    request(target, method, params = null, services = []) {
+    request(target, method, params = null, services) {
         return new Promise((resolve, reject) => {
             const id = this.ids.round();
+            if (services !== undefined && services.length == 0) {
+                return resolve();
+            }
+            services = services || [target];
             const msg = {
                 jsonrpc: RPC20,
                 from: this.name,
