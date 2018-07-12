@@ -118,13 +118,13 @@ export class RPCAgnostic {
         const idx = call.services.indexOf(msg.from);
         if (idx >= 0) {
           call.services.splice(idx, 1)
-        }
-        if ('result' in msg) {
-          call.bag[msg.from] = msg.result;
-          // complete
-          if (call.services.length === 0 && call.resolve) {
-            this.resolve(msg.id, call.bag, call);
-            this.cleanWaiter(msg.id, call)
+          if ('result' in msg) {
+            call.bag[msg.from] = msg.result;
+            // complete
+            if (call.services.length === 0 && call.resolve) {
+              this.resolve(msg.id, call.bag, call);
+              this.cleanWaiter(msg.id, call)
+            }
           }
         }
 
