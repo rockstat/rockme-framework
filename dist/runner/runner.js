@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const cctz_1 = require("cctz");
 const meter_1 = require("../meter");
 const redis_1 = require("../redis");
 const ids_1 = require("../ids");
 const config_1 = require("../config");
 const log_1 = require("../log");
 const rpc_1 = require("../rpc");
+const rpc_2 = require("../rpc");
 class Deps {
     constructor(obj) {
         Object.assign(this, obj);
@@ -17,6 +17,7 @@ class AppRunner {
     constructor() {
         this.appStarted = new Date();
         this.config = new config_1.AppConfig();
+        this.status = new rpc_2.AppStatus();
         this.log = new log_1.Logger(this.config.log).for(this);
         this.meter = new meter_1.Meter(this.config.meter);
         this.ids = new ids_1.TheIds();
@@ -42,16 +43,7 @@ class AppRunner {
         this.rpc = new rpc_1.RPCAgnostic(rpcOptions);
         const rpcAdaptor = new rpc_1.RPCAdapterRedis(rpcOptions);
         this.rpc.setup(rpcAdaptor);
-        this.rpc.register(rpc_1.METHOD_STATUS, async () => {
-            const appUptime = Number(new Date()) - Number(this.appStarted);
-            return {
-                status: "running",
-                app_started: Number(this.appStarted),
-                app_uptime: appUptime,
-                app_uptime_h: cctz_1.format('%X', Math.round(appUptime / 1000)),
-                methods: []
-            };
-        });
+        this.rpc.register(rpc_1.METHOD_STATUS, this.status.get);
         const aliver = () => {
             this.rpc.notify(rpc_1.SERVICE_DIRECTOR, rpc_1.METHOD_IAMALIVE, { name: this.name });
         };

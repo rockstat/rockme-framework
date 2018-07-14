@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ids_1 = require("../ids");
 const log_1 = require("../log");
 const meter_1 = require("../meter");
-const cache_1 = require("./cache");
 const RPC20 = '2.0';
 class RPCAgnostic {
     constructor(options) {
@@ -14,11 +13,10 @@ class RPCAgnostic {
         const { name, listen_all, listen_direct, log, meter } = options;
         this.ids = new ids_1.TheIds();
         this.name = name;
-        this.listen_all = listen_all;
-        this.listen_direct = listen_direct;
+        this.listen_all = listen_all || false;
+        this.listen_direct = listen_direct || true;
         this.log = log ? log : new log_1.StubLogger();
         this.meter = meter ? meter : new meter_1.StubMeter();
-        this.cache = new cache_1.RPCCache();
     }
     setup(adapter) {
         this.adapter = adapter;

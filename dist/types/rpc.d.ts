@@ -63,8 +63,9 @@ export declare type RPCWaitingCalls = {
 };
 export interface RPCConfig {
     name: string;
-    listen_all: boolean;
-    listen_direct: boolean;
+    listen_all?: boolean;
+    listen_enrich?: boolean;
+    listen_direct?: boolean;
 }
 export interface AgnosticRPCOptions extends RPCConfig {
     redisFactory: RedisFactoryType;

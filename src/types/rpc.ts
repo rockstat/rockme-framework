@@ -79,8 +79,9 @@ export type RPCWaitingCalls = { [k: string]: RPCWaitingCall | undefined };
 
 export interface RPCConfig {
   name: string;
-  listen_all: boolean;
-  listen_direct: boolean;
+  listen_all?: boolean;
+  listen_enrich?: boolean;
+  listen_direct?: boolean;
 }
 
 

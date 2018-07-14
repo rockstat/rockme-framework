@@ -2,7 +2,7 @@ import * as Redis from 'redis-fast-driver';
 
 import { RedisConfig, LoggerType, RedisClientOptions, MeterFacade } from '../types';
 import { StubLogger } from '../log';
-import { StubMeter } from '..';
+import { StubMeter } from '../meter';
 
 export class RedisClient {
 

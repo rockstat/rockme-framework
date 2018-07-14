@@ -16,7 +16,6 @@ import {
   MeterFacade,
   RequestHandler
 } from "../types";
-import { RPCCache } from "./cache";
 
 const RPC20 = '2.0';
 
@@ -33,17 +32,15 @@ export class RPCAgnostic {
   listen_direct: boolean;
   listen_all: boolean;
   name: string;
-  cache: RPCCache;
 
   constructor(options: AgnosticRPCOptions) {
     const { name, listen_all, listen_direct, log, meter } = options;
     this.ids = new TheIds();
     this.name = name;
-    this.listen_all = listen_all;
-    this.listen_direct = listen_direct;
+    this.listen_all = listen_all || false;
+    this.listen_direct = listen_direct || true;
     this.log = log ? log : new StubLogger();
     this.meter = meter ? meter : new StubMeter();
-    this.cache = new RPCCache();
   }
 
   setup(adapter: RPCAdapter) {

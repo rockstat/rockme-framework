@@ -1,6 +1,6 @@
 {
   "name": "rock-me-ts",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "Package contains Agnostic JSON-RPC2 client/server implementation and other Rockstat requirements for microservice development",
   "main": "./dist/index.js",
   "private": true,
@@ -41,7 +41,8 @@
     "merge-options": "^1.0.1",
     "pino": "^4.16.1",
     "redis-fast-driver": "^2.1.2",
-    "statsd-client": "^0.4.2"
+    "statsd-client": "^0.4.2",
+    "xxhash": "^0.2.4"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.20",

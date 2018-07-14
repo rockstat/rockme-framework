@@ -5,6 +5,7 @@ import { AppConfig } from '../config';
 import { Logger } from '../log';
 import { RPCAgnostic } from '../rpc';
 import { RPCAdapter, ConfigRoot } from '../types';
+import { AppStatus } from '../rpc';
 export declare class Deps<T> {
     log: Logger;
     id: TheIds;
@@ -24,6 +25,7 @@ export declare class AppRunner<T> {
     log: Logger;
     deps: Deps<T>;
     ids: TheIds;
+    status: AppStatus;
     meter: Meter;
     config: AppConfig<ConfigRoot>;
     name: string;

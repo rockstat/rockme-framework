@@ -6,4 +6,5 @@ export declare class TheIds {
     constructor();
     flake(): string;
     round(): string;
+    xxhash(str: string): string;
 }

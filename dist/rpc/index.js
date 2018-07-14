@@ -6,4 +6,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./agnostic"));
 __export(require("./adapter/redis"));
 __export(require("./constants"));
+__export(require("./status"));
 //# sourceMappingURL=index.js.map

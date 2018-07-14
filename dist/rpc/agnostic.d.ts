@@ -1,7 +1,6 @@
 import { TheIds } from "../ids";
 import { RPCAdapter, RPCWaitingCall } from "../types";
 import { AgnosticRPCOptions, RPCWaitingCalls, RpcMethods, LoggerType, RPCRequest, RPCResponse, RPCResponseError, RPCRequestParams, MeterFacade, RequestHandler } from "../types";
-import { RPCCache } from "./cache";
 export declare class RPCAgnostic {
     ids: TheIds;
     meter: MeterFacade;
@@ -14,7 +13,6 @@ export declare class RPCAgnostic {
     listen_direct: boolean;
     listen_all: boolean;
     name: string;
-    cache: RPCCache;
     constructor(options: AgnosticRPCOptions);
     setup(adapter: RPCAdapter): void;
     publish(msg: RPCRequest | RPCResponse | RPCResponseError): void;
