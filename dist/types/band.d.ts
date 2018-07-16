@@ -16,9 +16,8 @@ export interface MethodRegistration {
     options: MethodRegistrationOptions;
 }
 export interface RPCAppStatus {
-    status: "running";
+    app_state: "running";
     app_started: number;
     app_uptime: number;
-    app_uptime_h: string;
     methods: Array<MethodRegistration>;
 }
