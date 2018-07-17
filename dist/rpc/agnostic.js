@@ -7,7 +7,7 @@ const RPC20 = '2.0';
 class RPCAgnostic {
     constructor(options) {
         this.started = false;
-        this.timeout = 500;
+        this.timeout = 1000;
         this.queue = {};
         this.methods = {};
         const { name, listen_all, listen_direct, log, meter } = options;
@@ -123,10 +123,11 @@ class RPCAgnostic {
     request(target, method, params = null, services) {
         return new Promise((resolve, reject) => {
             const id = this.ids.round();
-            if (services !== undefined && services.length == 0) {
+            if (services && services.length == 0) {
                 return resolve();
             }
-            services = services || [target];
+            services = services || [];
+            const multi = services.length > 0;
             const msg = {
                 jsonrpc: RPC20,
                 from: this.name,
@@ -139,7 +140,7 @@ class RPCAgnostic {
                 resolve,
                 reject,
                 bag: {},
-                multi: services.length > 0,
+                multi: multi,
                 services: services,
                 timing: this.meter.timenote('rpc.request', { target, method }),
                 params: params,

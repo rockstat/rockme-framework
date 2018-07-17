@@ -24,7 +24,7 @@ export class RPCAgnostic {
   ids: TheIds;
   meter: MeterFacade;
   started: boolean = false;
-  timeout: number = 500;
+  timeout: number = 1000;
   log: LoggerType;
   queue: RPCWaitingCalls = {};
   methods: RpcMethods = {};
@@ -174,11 +174,12 @@ export class RPCAgnostic {
     return new Promise<any>((resolve, reject) => {
       const id = this.ids.round();
       // if destination services is empty do not send request
-      if (services !== undefined && services.length == 0) {
+      if (services && services.length == 0) {
         return resolve();
       }
       // fill services for simple request
-      services = services || [target];
+      services = services || [];
+      const multi = services.length > 0;
       const msg: RPCRequest = {
         jsonrpc: RPC20,
         from: this.name,
@@ -191,7 +192,7 @@ export class RPCAgnostic {
         resolve,
         reject,
         bag: {},
-        multi: services.length > 0,
+        multi: multi,
         services: services,
         timing: this.meter.timenote('rpc.request', { target, method }),
         params: params,
