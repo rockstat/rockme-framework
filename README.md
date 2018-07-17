@@ -15,7 +15,6 @@ Library with main components that needs for building Rockstat microservice on No
 
 ### Redis RPC
 
-
     // setup Redis
     const redisFactory = new RedisFactory({ log, meter, ...config.redis });
 
