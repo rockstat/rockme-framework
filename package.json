@@ -1,6 +1,6 @@
 {
   "name": "rock-me-ts",
-  "version": "1.4.187",
+  "version": "1.4.188",
   "description": "Package contains Agnostic JSON-RPC2 client/server implementation and other Rockstat requirements for microservice development",
   "main": "./dist/index.js",
   "private": true,
@@ -15,7 +15,8 @@
     "clean": "rimraf dist",
     "lint": "tslint -c tslint.json -t stylish -p ./tsconfig.json",
     "security-check": "nsp check",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "patch": "yarn version --loose-semver --new-version patch"
   },
   "repository": {
     "type": "git",
