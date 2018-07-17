@@ -5,8 +5,6 @@ Library with main components that needs for building Rockstat microservice on No
 ## Usage
 
 ### Simple components
-
-
     const log = new Logger(config.log);
     const meter = new Meter(config.meter);
 
