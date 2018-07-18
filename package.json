@@ -1,9 +1,8 @@
 {
-  "name": "rock-me-ts",
-  "version": "1.4.189",
+  "name": "@rockstat/rock-me-ts",
+  "version": "1.5.1",
   "description": "Package contains Agnostic JSON-RPC2 client/server implementation and other Rockstat requirements for microservice development",
   "main": "./dist/index.js",
-  "private": true,
   "typings": "./dist/index.d.ts",
   "engines": {
     "node": ">=9"
@@ -16,6 +15,7 @@
     "lint": "tslint -c tslint.json -t stylish -p ./tsconfig.json",
     "security-check": "nsp check",
     "watch": "tsc -w",
+    "publish": "yarn build && yarn run patch && npm publish --access public",
     "patch": "yarn version --loose-semver --new-version patch"
   },
   "repository": {
@@ -27,6 +27,19 @@
   "bugs": {
     "url": "https://github.com/rockstat/rock-me-ts/issues"
   },
+  "files": [
+    ".editorconfig",
+    ".gitignore",
+    "LICENSE",
+    "package-lock.json",
+    "package.json",
+    "README.md",
+    "tsconfig.json",
+    "yarn.lock",
+    "@types/**",
+    "dist/**",
+    "src/**"
+  ],
   "homepage": "https://rstat.org",
   "dependencies": {
     "bluebird": "^3.5.1",
