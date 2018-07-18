@@ -15,7 +15,7 @@
     "lint": "tslint -c tslint.json -t stylish -p ./tsconfig.json",
     "security-check": "nsp check",
     "watch": "tsc -w",
-    "publish": "yarn build && yarn run patch && npm publish --access public",
+    "pub": "npm publish --access public",
     "patch": "yarn version --loose-semver --new-version patch"
   },
   "repository": {

@@ -3,4 +3,5 @@
 /yarn-error.log
 /deploy
 /.env*
+/dist
 /emergency
