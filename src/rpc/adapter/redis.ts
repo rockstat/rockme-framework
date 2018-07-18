@@ -24,7 +24,7 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
       log
     } = options;
 
-    this.log = log ? log.for(this) : new  StubLogger();
+    this.log = log ? log.for(this) : new StubLogger();
     this.rsub = redisFactory.create();
 
     this.rsub.on('connect', () => {
@@ -57,7 +57,7 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
 
   send(to: string, msg: any): void {
     const raw = this.encode(msg);
-    this.log.debug('\n <---', raw)
+    this.log.debug(msg, '<---')
     this.rpub.publish(to, raw);
   }
 
@@ -65,8 +65,8 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
 
     if (redismsg[0] === 'message' || redismsg[0] === 'pmessage') {
       const raw = redismsg[redismsg.length - 1];
-      this.log.debug('\n --> ', raw);
       const msg = this.decode(raw);
+      this.log.debug(msg, ' --> ');
       if (msg && msg.jsonrpc === '2.0') {
         // this.receiver(msg);
         this.emit('message', msg);

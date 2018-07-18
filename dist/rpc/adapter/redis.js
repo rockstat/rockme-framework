@@ -8,8 +8,8 @@ class RPCAdapterRedis extends EventEmitter {
         this.redisMsg = (redismsg) => {
             if (redismsg[0] === 'message' || redismsg[0] === 'pmessage') {
                 const raw = redismsg[redismsg.length - 1];
-                this.log.debug('\n --> ', raw);
                 const msg = this.decode(raw);
+                this.log.debug(msg, ' --> ');
                 if (msg && msg.jsonrpc === '2.0') {
                     this.emit('message', msg);
                 }
@@ -50,7 +50,7 @@ class RPCAdapterRedis extends EventEmitter {
     }
     send(to, msg) {
         const raw = this.encode(msg);
-        this.log.debug('\n <---', raw);
+        this.log.debug(msg, '<---');
         this.rpub.publish(to, raw);
     }
 }
