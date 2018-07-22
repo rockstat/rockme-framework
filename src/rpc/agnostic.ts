@@ -24,7 +24,7 @@ export class RPCAgnostic {
   ids: TheIds;
   meter: MeterFacade;
   started: boolean = false;
-  timeout: number = 1000;
+  timeout: number;
   log: LoggerType;
   queue: RPCWaitingCalls = {};
   methods: RpcMethods = {};
@@ -37,6 +37,7 @@ export class RPCAgnostic {
     const { name, listen_all, listen_direct, log, meter } = options;
     this.ids = new TheIds();
     this.name = name;
+    this.timeout = 200;
     this.listen_all = listen_all || false;
     this.listen_direct = listen_direct || true;
     this.log = log ? log : new StubLogger();

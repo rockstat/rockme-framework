@@ -18,17 +18,21 @@ export interface RedusListenerFn {
 }
 
 export interface RedisConfig {
-  host: string;
-  port: number;
-  db: number;
-  auth: boolean;
-  maxRetries: number;
-  tryToReconnect: boolean;
-  reconnectTimeout: number;
-  autoConnect: boolean;
-  doNotSetClientName: boolean;
-  doNotRunQuitOnEnd: boolean;
+  dsn: string;
 }
+
+// export interface RedisConfig {
+//   host: string;
+//   port: number;
+//   db: number;
+//   auth: boolean;
+//   maxRetries: number;
+//   tryToReconnect: boolean;
+//   reconnectTimeout: number;
+//   autoConnect: boolean;
+//   doNotSetClientName: boolean;
+//   doNotRunQuitOnEnd: boolean;
+// }
 
 export interface RedisClientOptions extends RedisConfig {
   log?: LoggerType;

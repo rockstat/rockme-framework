@@ -30,16 +30,28 @@ declare module 'redis-fast-driver' {
       host: string;
       port: number;
       db: number;
-      auth: boolean;
-      maxRetries: number;
-      tryToReconnect: boolean;
-      reconnectTimeout: number;
-      autoConnect: boolean;
-      doNotSetClientName: boolean;
-      doNotRunQuitOnEnd: boolean;
+      auth?: boolean;
+      maxRetries?: number;
+      tryToReconnect?: boolean;
+      reconnectTimeout?: number;
+      autoConnect?: boolean;
+      doNotSetClientName?: boolean;
+      doNotRunQuitOnEnd?: boolean;
     }
 
   namespace Redis {
+    interface RedisOptions {
+      host: string;
+      port: number;
+      db: number;
+      auth?: boolean;
+      maxRetries?: number;
+      tryToReconnect?: boolean;
+      reconnectTimeout?: number;
+      autoConnect?: boolean;
+      doNotSetClientName?: boolean;
+      doNotRunQuitOnEnd?: boolean;
+    }
   }
 
   // const RootRedis: Redis.Redis & { Redis: new () => Redis.Redis };

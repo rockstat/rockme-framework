@@ -1,8 +1,10 @@
 import * as Redis from 'redis-fast-driver';
+import { RedisOptions } from 'redis-fast-driver';
 
 import { RedisConfig, LoggerType, RedisClientOptions, MeterFacade } from '../types';
 import { StubLogger } from '../log';
 import { StubMeter } from '../meter';
+import { parse as urlParse } from 'url';
 
 export class RedisClient {
 
@@ -19,10 +21,16 @@ export class RedisClient {
     this.log = log ? log.for(this) : new StubLogger();
     this.meter = meter ? meter : new StubMeter();
 
-    const { host, port, db } = config;
 
-    this.log.info('Starting redis client. Server: %s:%s/%d', host, port, db);
-    this.client = new Redis(config);
+    const parts = urlParse(config.dsn)
+
+    // if (parts.hostname && parts.port && parts.path) {
+    const host: string = parts.hostname || 'localhost';
+    const port: number = Number(parts.port || 6379)
+    const db: number = Number((parts.path || '/0x').slice(1))
+
+    this.log.info(`Starting redis client. DSN: ${config.dsn}`);
+    this.client = new Redis({ host, port, db });
 
     //happen only once
     this.client.on('ready', () => {
