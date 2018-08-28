@@ -52,15 +52,50 @@ export class RPCAgnostic {
     this.log.info('started');
   }
 
-  publish(msg: RPCRequest | RPCResponse | RPCResponseError): void {
-    if ('method' in msg && msg.method !== undefined) {
-      msg.method = `${msg.to}:${msg.method}:${this.name}`;
+
+  /**
+   * Resolve waiting waiter
+   * @param id
+   * @param result
+   * @param call
+   */
+  resolve(id: string, result: any, call: RPCWaitingCall) {
+    if (call.resolve && result) {
+      call.timing();
+      call.resolve(result);
+      this.cleanWaiter(id, call)
     }
-    this.adapter.send(msg.to, msg)
+  }
+
+  /**
+   * Cleaning request state
+   * @param id RPC request ID
+   * @param call waiter state struct
+   */
+  cleanWaiter(id: string, call?: RPCWaitingCall) {
+    if (call && call.timeout) {
+      clearTimeout(call.timeout)
+    }
+    this.queue[id] = undefined;
+  }
+
+  onTimeout = (id: string) => {
+    const call = this.queue[id];
+    if (call) {
+      this.queue[id] = undefined;
+      if (call.multi) {
+        call.resolve(call.bag);
+      }
+      else {
+        call.reject(new Error('Reuest timeout'));
+      }
+      this.cleanWaiter(id);
+    } else {
+      this.log.error(`onTimeout called but call ${id} not found in stack`);
+    }
   }
 
   async dispatch(msg: RPCResponse | RPCResponseError | RPCRequest): Promise<void> {
-
     if ('method' in msg && msg.method !== undefined) {
       const names = msg.method.split(':');
       if (names.length === 3) {
@@ -83,30 +118,26 @@ export class RPCAgnostic {
     }
   }
 
-  /**
-   * Resolve waiting waiter
-   * @param id
-   * @param result
-   * @param call
-   */
-  resolve(id: string, result: any, call: RPCWaitingCall) {
-    if (call.resolve && result) {
-      call.timing();
-      call.resolve(result);
+
+  async dispatchRequest(msg: RPCRequest): Promise<RPCResponse | RPCResponseError | undefined> {
+    const { method, from } = msg;
+    try {
+      const result = await this.methods[method](msg.params || {});
+      if ('id' in msg && msg.id !== undefined) {
+        return {
+          jsonrpc: RPC20,
+          id: msg.id,
+          from: this.name,
+          to: from,
+          result: result || null
+        }
+      }
+    } catch (error) {
+      return this.wrapError(msg, error);
+      this.log.error('handler exec error', error);
     }
   }
 
-  /**
-   * Cleaning request state
-   * @param id RPC request ID
-   * @param call waiter state struct
-   */
-  cleanWaiter(id: string, call: RPCWaitingCall) {
-    if (call.timeout) {
-      clearTimeout(call.timeout)
-    }
-    this.queue[id] = undefined;
-  }
 
   async dispatchResponse(msg: RPCResponse | RPCResponseError): Promise<void> {
     const call = this.queue[msg.id];
@@ -136,30 +167,27 @@ export class RPCAgnostic {
           this.meter.tick('rpc.error')
           call.reject(msg.error);
         }
-        this.cleanWaiter(msg.id, call)
       }
     }
   }
 
-  async dispatchRequest(msg: RPCRequest): Promise<RPCResponse | RPCResponseError | undefined> {
-    const { method, from } = msg;
-    try {
-      const result = await this.methods[method](msg.params || {});
-      if ('id' in msg && msg.id !== undefined) {
-        return {
-          jsonrpc: RPC20,
-          id: msg.id,
-          from: this.name,
-          to: from,
-          result: result || null
-        }
-      }
-    } catch (error) {
-      return this.wrapError(msg, error);
-      this.log.error('handler exec error', error);
+  /**
+   * Low-level function for send messages
+   * @param msg RPC-compatible message
+   */
+  publish(msg: RPCRequest | RPCResponse | RPCResponseError): void {
+    if ('method' in msg && msg.method !== undefined) {
+      msg.method = `${msg.to}:${msg.method}:${this.name}`;
     }
+    this.adapter.send(msg.to, msg)
   }
 
+  /**
+   * Send notification to remote service(s)
+   * @param target target service or channel
+   * @param method remote method to call
+   * @param params remote method params
+   */
   notify(target: string, method: string, params: RPCRequestParams = null): void {
     const msg: RPCRequest = {
       jsonrpc: RPC20,
@@ -171,6 +199,13 @@ export class RPCAgnostic {
     this.publish(msg)
   }
 
+  /**
+   * Execute remote function(s)
+   * @param target target service or channel
+   * @param method remote method to call
+   * @param params remote method params
+   * @param services services list for answer waiting
+   */
   request<T>(target: string, method: string, params: RPCRequestParams = null, services?: string[]): Promise<T> {
     return new Promise<any>((resolve, reject) => {
       const id = this.ids.round();
@@ -197,18 +232,7 @@ export class RPCAgnostic {
         services: services,
         timing: this.meter.timenote('rpc.request', { target, method }),
         params: params,
-        timeout: setTimeout(() => {
-          const call = this.queue[id];
-          if (call) {
-            this.queue[id] = undefined;
-            if (call.multi) {
-              call.resolve(call.bag);
-            }
-            else {
-              call.reject(new Error('Reuest timeout'));
-            }
-          }
-        }, this.timeout)
+        timeout: setTimeout(() => this.onTimeout(id), this.timeout)
       };
       this.publish(msg)
     })
