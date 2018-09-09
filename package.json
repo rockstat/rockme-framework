@@ -1,14 +1,14 @@
 {
   "name": "@rockstat/rock-me-ts",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Package contains Agnostic JSON-RPC2 client/server implementation and other Rockstat requirements for microservice development",
   "main": "dist/index.js",
-  "types" : "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=9"
   },
   "scripts": {
-    "start": "ts-node-dev -r 'tsconfig-paths/register' ./src/start.ts | pino",
+    "start": "ts-node-dev -r 'tsconfig-paths/register' ./src/index.ts | pino",
     "build": "rimraf dist && tsc -p tsconfig.json",
     "prod": "node dist/index",
     "clean": "rimraf dist",
@@ -70,6 +70,7 @@
   "devDependencies": {
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.6",
+    "ts-node-dev": "^1.0.0-pre.29",
     "tsconfig-paths": "^3.3.2",
     "typescript": "^2.9.1"
   }

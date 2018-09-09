@@ -60,10 +60,13 @@ export class RPCAgnostic {
    * @param call
    */
   resolve(id: string, result: any, call: RPCWaitingCall) {
-    if (call.resolve && result) {
+    this.log.debug('resolve')
+    if (call.resolve && result !== undefined) {
       call.timing();
       call.resolve(result);
       this.cleanWaiter(id, call)
+    } else {
+      call.reject(new Error('Bad params to resolve request'))
     }
   }
 

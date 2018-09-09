@@ -57,18 +57,14 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
 
   send(to: string, msg: any): void {
     const raw = this.encode(msg);
-    this.log.debug(msg, '<---')
     this.rpub.publish(to, raw);
   }
 
   redisMsg = (redismsg: Array<string>) => {
-
     if (redismsg[0] === 'message' || redismsg[0] === 'pmessage') {
       const raw = redismsg[redismsg.length - 1];
       const msg = this.decode(raw);
-      this.log.debug(msg, ' --> ');
       if (msg && msg.jsonrpc === '2.0') {
-        // this.receiver(msg);
         this.emit('message', msg);
       }
 
