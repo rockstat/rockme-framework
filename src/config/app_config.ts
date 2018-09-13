@@ -9,6 +9,7 @@ import {
   ENV_STAGE,
   ENV_DEV
 } from './constants';
+import * as consts from './constants';
 import {
   ConfigRoot,
   AppConfigOptions,
@@ -29,7 +30,7 @@ export class AppConfig<T> {
   get http() { return this.get('http'); }
   get ws() { return this.get('websocket'); }
   get log() { return this.get('log'); }
-  get static() { return this.get('static')[this.env]; }
+  get static() { return this.get('static'); }
   get redis() { return this.get('redis'); }
   get client() { return this.get('client'); }
   get meter() { return this.get('metrics'); }
@@ -49,11 +50,14 @@ export class AppConfig<T> {
     ).map(file => readFileSync(file).toString());
     const tmplData = {
       env: process.env,
+      envName: this.env,
+      consts,
       ...(options.vars || {})
     }
     const yaml = ejsRender(parts.join('\n'), tmplData, { async: false });
     const docs = safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined)
-    return mergeOptions({}, ...<object[]>docs);
+    const { dev, prod, ...common } = mergeOptions({}, ...<object[]>docs);
+    return mergeOptions(common, this.isProd() ? prod : dev);
   }
 
   get<K extends keyof AbstractConfig<T>>(section: K): AbstractConfig<T>[K] {
