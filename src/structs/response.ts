@@ -56,23 +56,23 @@ export interface BandResponseBase {
 export type BandResponseRedirect = {
   [RESP_TYPE_KEY]: ResponseTypeRedirect;
   location: string;
-  httpCode: number;
+  statusCode: number;
 } & BandResponseBase;
 
 export type BandResponsePixel = {
   [RESP_TYPE_KEY]: ResponseTypePixel;
-  httpCode: number;
+  statusCode: number;
 } & BandResponseBase;
 
 export type BandResponseError = {
   [RESP_TYPE_KEY]: ResponseTypeError;
-  httpCode: number;
+  statusCode: number;
   errorMessage: string;
 } & BandResponseBase;
 
 export type BandResponseData = {
   [RESP_TYPE_KEY]: ResponseTypeData;
-  httpCode: number;
+  statusCode: number;
   contentType?: string;
   data: BandResponseDataType;
 } & BandResponseBase;
@@ -80,7 +80,7 @@ export type BandResponseData = {
 // export type ResponseTypes = ResponseTypeRedirect | ResponseTypeError | ResponseTypePixel | ResponseTypeData | ResponseTypeEmpty;
 // export interface BandResponseFull {
 //   location?: string;
-//   httpCode?: number;
+//   statusCode?: number;
 //   type: ResponseTypes;
 //   errorMessage?: string;
 //   data?: { [k: string]: any } | Buffer | string | number | null;
@@ -91,47 +91,62 @@ export type BandResponse = BandResponseData
   | BandResponseRedirect
   | BandResponseError
 
+export type BandRedirectResponseBuilder = (params: { location: string, statusCode?: HTTPCodes, headers?: HTTPHeaders }) => BandResponseRedirect;
 
-const redirect: (params: { location: string, httpCode?: HTTPCodes, headers?: HTTPHeaders }) => BandResponseRedirect = ({ location, httpCode, headers }) => {
+const redirect: BandRedirectResponseBuilder = ({ location, statusCode, headers }) => {
   return {
     [RESP_TYPE_KEY]: RESP_REDIRECT,
     headers: headers || [],
     location,
-    httpCode: httpCode || STATUS_TEMP_REDIR,
+    statusCode: statusCode || STATUS_TEMP_REDIR,
   }
 }
 
-const pixel: (params: { httpCode?: HTTPCodes, headers?: HTTPHeaders }) => BandResponsePixel = ({ httpCode, headers }) => {
+export type BandPixelResponseBuilder = (params: { statusCode?: HTTPCodes, headers?: HTTPHeaders }) => BandResponsePixel;
+
+const pixel: BandPixelResponseBuilder = ({ statusCode, headers }) => {
   return {
     [RESP_TYPE_KEY]: RESP_PIXEL,
     headers: headers || [],
-    httpCode: httpCode || STATUS_OK,
+    statusCode: statusCode || STATUS_OK,
     type: RESP_PIXEL
   }
 }
 
-const error: (params: { httpCode?: HTTPCodes, errorMessage?: string, headers?: HTTPHeaders }) => BandResponseError = ({ httpCode, errorMessage, headers }) => {
-  httpCode = httpCode || STATUS_INT_ERROR;
+export type BandErrorResponseBuilder = (params: { statusCode?: HTTPCodes, errorMessage?: string, headers?: HTTPHeaders }) => BandResponseError;
+
+const error: BandErrorResponseBuilder = ({ statusCode, errorMessage, headers }) => {
+  statusCode = statusCode || STATUS_INT_ERROR;
   return {
     [RESP_TYPE_KEY]: RESP_ERROR,
     headers: headers || [],
-    httpCode: httpCode,
-    errorMessage: errorMessage || STATUS_DESCRIPTIONS[httpCode],
+    statusCode: statusCode,
+    errorMessage: errorMessage || STATUS_DESCRIPTIONS[statusCode],
   }
 }
 
-const data: (params: { data?: BandResponseData['data'], httpCode?: HTTPCodes, headers?: HTTPHeaders, contentType?: string }) => BandResponseData = ({ data, httpCode, headers, contentType }) => {
+export type BandDataResponsdeBuilder = (params: { data?: BandResponseData['data'], statusCode?: HTTPCodes, headers?: HTTPHeaders, contentType?: string }) => BandResponseData;
+
+const data: BandDataResponsdeBuilder = ({ data, statusCode, headers, contentType }) => {
   return {
     [RESP_TYPE_KEY]: RESP_DATA,
     headers: headers || [],
-    httpCode: httpCode || STATUS_OK,
+    statusCode: statusCode || STATUS_OK,
     contentType: contentType,
     data: data || {}
   }
 }
 
-export const isBansResponse = (msg: BandResponseDataType | BandResponse) => {
-  return msg && typeof msg === 'object' && RESP_TYPE_KEY in msg;
+/**
+ * Check is correct band response
+ * @param msg 
+ */
+export const isBandResponse = (msg: BandResponseDataType | BandResponse) => {
+  return msg !== undefined
+    && msg !== null
+    && typeof msg === 'object'
+    && !Array.isArray(msg)
+    && RESP_TYPE_KEY in msg;
 }
 
 export const response = {

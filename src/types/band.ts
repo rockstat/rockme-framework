@@ -10,6 +10,7 @@ export interface MethodRegistrationOptions {
 
 export interface MethodRegRequest {
   register?: Array<MethodRegistration>
+  state_hash?: string;
 }
 
 export interface MethodRegistration {

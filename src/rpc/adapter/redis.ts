@@ -67,9 +67,8 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
       if (msg && msg.jsonrpc === '2.0') {
         this.emit('message', msg);
       }
-
     } else {
-      this.log.warn('unhandled cmd', redismsg);
+      this.log.debug('unhandled cmd', redismsg);
     }
   }
 

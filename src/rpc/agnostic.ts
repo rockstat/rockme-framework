@@ -99,6 +99,7 @@ export class RPCAgnostic {
   }
 
   async dispatch(msg: RPCResponse | RPCResponseError | RPCRequest): Promise<void> {
+    // preparing incoming data
     if ('method' in msg && msg.method !== undefined) {
       const names = msg.method.split(':');
       if (names.length === 3) {
@@ -112,13 +113,19 @@ export class RPCAgnostic {
       this.dispatchRequest(msg).then(res => {
         if (res) {
           this.publish(res);
+        } else {
+          this.log.warn('no response given dispatchRequest')
         }
       })
+      return;
     }
     // Handling response
     else if ('id' in msg && msg.id !== undefined && ('result' in msg || 'error' in msg)) {
       this.dispatchResponse(msg)
+      return;
     }
+
+    this.log.warn('unhandled message at dispatch', msg);
   }
 
 
@@ -157,21 +164,31 @@ export class RPCAgnostic {
               this.resolve(msg.id, call.bag, call);
               this.cleanWaiter(msg.id, call)
             }
+          } else if ('error' in msg) {
+            this.log.warn(`Received error response from ${msg.from}`, msg);
+          } else {
+            this.log.warn(`Unknown message struce`, msg);
           }
+        } else {
+          // unneeded responses
         }
-
+        return;
       }
       // single requests
       else {
         if ('result' in msg && call.resolve) {
           this.resolve(msg.id, msg.result, call);
+          return;
         }
-        if ('error' in msg && call.reject) {
+        else if ('error' in msg && call.reject) {
           this.meter.tick('rpc.error')
+          this.log.warn('rpc error')
           call.reject(msg.error);
+          return;
         }
       }
     }
+    this.log.warn('unhandled message at dispatchResponse', { msg, call });
   }
 
   /**
