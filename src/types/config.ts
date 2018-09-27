@@ -1,4 +1,4 @@
-export type Envs = 'dev' | 'prod' | 'stage';
+export type Envs = 'dev' | 'production' | 'stage';
 
 import { RPCConfig } from './rpc'
 import { RedisConfig } from './redis'
