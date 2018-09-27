@@ -2,7 +2,6 @@ PERCENT := %
 DEL := /
 BR != shell git branch | grep \* | cut -d ' ' -f2-
 
-esc_repo := $(subst $(DEL),$(PERCENT)2F,$(repo))
 
 bump-patch:
 	bumpversion patch
@@ -33,4 +32,4 @@ travis-trigger:
 		-H "Travis-API-Version: 3" \
 		-H "Authorization: token $$TRAVIS_TOKEN" \
 		-d '{ "request": { "branch":"$(br)" }}' \
-		https://api.travis-ci.com/repo/$(esc_repo)/requests
+		https://api.travis-ci.com/repo/$(subst $(DEL),$(PERCENT)2F,$(repo))/requests
