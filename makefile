@@ -1,4 +1,11 @@
-BR := $(shell git branch | grep \* | cut -d ' ' -f2-)
+CODE_BRANCH != shell git branch | grep \* | cut -d ' ' -f2-
+BR := $${TRAVIS_BRANCH:-$(CODE_BRANCH)}
+TRAVIS_REPO :=$${TRAVIS_REPO_SLUG/\//\%2F}
+branch ?= $(BR)
+
+br:
+	@echo "$(BR)"
+
 bump-patch:
 	bumpversion patch
 
@@ -20,3 +27,14 @@ to_master:
 push:
 	git push origin master
 	git push origin dev
+
+travis-trigger:
+	
+	@BODY='{"request": {"branch":"$(branch)" }}'
+	source .env && curl -s -X POST -v \
+		-H "Content-Type: application/json" \
+		-H "Accept: application/json" \
+		-H "Travis-API-Version: 3" \
+		-H "Authorization: token $$TRAVIS_TOKEN" \
+		-d "$$BODY" \
+		https://api.travis-ci.com/repo/$(repo)/requests
