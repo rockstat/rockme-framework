@@ -30,12 +30,10 @@ push:
 	git push origin dev
 
 travis-trigger:
-
-	BODY='{"request": {"branch":"$(br)" }}'
-	curl -s -X POST -v \
+	curl -vv -s -X POST \
 		-H "Content-Type: application/json" \
 		-H "Accept: application/json" \
 		-H "Travis-API-Version: 3" \
 		-H "Authorization: token $$TRAVIS_TOKEN" \
-		-d "$$BODY" \
+		-d '{ "request": { "branch": "$(br)" } }' \
 		https://api.travis-ci.com/repo/$(esc_repo)/requests
