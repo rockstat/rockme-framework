@@ -4,9 +4,6 @@ BR != shell git branch | grep \* | cut -d ' ' -f2-
 
 esc_repo := $(subst $(DEL),$(PERCENT)2F,$(repo))
 
-br:
-	@echo "$(BR)"
-
 bump-patch:
 	bumpversion patch
 
@@ -35,5 +32,5 @@ travis-trigger:
 		-H "Accept: application/json" \
 		-H "Travis-API-Version: 3" \
 		-H "Authorization: token $$TRAVIS_TOKEN" \
-		-d '{ "request": { "branch": "$(br)" } }' \
+		-d '{ "request": { "branch":"$(br)" }}' \
 		https://api.travis-ci.com/repo/$(esc_repo)/requests
