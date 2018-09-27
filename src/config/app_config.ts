@@ -50,7 +50,7 @@ export class AppConfig<T> {
     ).map(file => readFileSync(file).toString());
     const tmplData = {
       env: process.env,
-      envName: this.env,
+      envName: AppConfig.env,
       consts,
       ...(options.vars || {})
     }
