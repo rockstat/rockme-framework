@@ -31,7 +31,7 @@ push:
 travis-trigger:
 	
 	@BODY='{"request": {"branch":"$(branch)" }}'
-	source .env && curl -s -X POST -v \
+	curl -s -X POST -v \
 		-H "Content-Type: application/json" \
 		-H "Accept: application/json" \
 		-H "Travis-API-Version: 3" \
