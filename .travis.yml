@@ -1,0 +1,30 @@
+sudo: required
+dist: trusty
+branches:
+  only:
+  - master
+  - dev
+env:
+  global:
+  - PROJECT_NAME=band-base-ts
+  - ORG=rockstat
+  - IMAGE_NAME=$ORG/$PROJECT_NAME
+  - TAG="$( [ $TRAVIS_BRANCH == 'master' ] && echo latest || echo $TRAVIS_BRANCH )"
+  - secure: kkIK2IbBnsVvdQyJiuqctZrH178qRVUkPp5/R7/18FOCru87U3puVd//pLH3uFSaQGm461AJ+ur7Cd6iO3mPbkk8TK6X5P9i6fV15cSRQt5vOl8Y51ymBkfNH6l+UNFe8LJiPpfDZ0IVCPkBIEhJccXBSt7bliwIJofvYxgxCzsr9IJWQaWZxN6jzo6OSLZgPlpqTzmhF9OgCTLhh5/NyZPlh3mZHnm4RNItZhFjs0NuTHBbI5PY9zbqluxqEvd/Q1PrjfYOdHMoO0KtcJnlrie4xBoVuRs/JuwoToF+QZH8pknSC6hs7eeqBWOZNw5bpnCOmoKRvOte17U8EBaCEuTYl+s33aL9X7C8sfIUw8QvXQ7ao7LwpEs6YSV5+w3BZLIDUusCMdUVKzyoF4YGF1bfaUNRoP5afjkiPv+sKl9IDJkfkPw1sAXlcdL9VMngUcvDy1qdi7L8RX7Z7xqv/fmGH8eKomkJDwaXL1xOEcCrSwUcsrpfzVy6EjvUJyuYauwFD5auvyZprSsSfsgre0Q5i5aCvz4f//7+Fc3GlWkCMw5Z2HeBxTCWq+h1cQ9Ct/GhGvNk4w/yQ31/dRjPfG96RpYIl6bYgdDgJU8/3b494/Tcy9wiObeqZ/DeNkegs14LGd4O5D7brYQ+GxFdZyqrR0sWLsaX+cNlelaLZEE=
+  - secure: qKYPKAUo1vOwMUhlPnreMcJHTmvhEDob9OuVZZJKCLoSCxUUHotQ5GXY8eFzHM/aRfOVw0KlPRMcPZOY3bkAA4AQjstE/im+Fs04+9xdI6n+SMilQhP6bIuM6oVpIlrBynsnG5at49T1MQhYpfoXnT7KnxP+O6OetwW3Oe4o+DOPV0KiZmtC7OP+VxL55LDFVYjWLmJWTUnVHQfWJgRscyrJe8Yjwpd+HcAOz8ZmkPfImtSWyymsszyP99zklYPTaCNM9094p6dr9/0xNbyW/KaT3khH7yP/dwlJdbAS/4JB2GTqNb8QcoEj7x+DK6IJh+/OC04FCBRuMMdNDWnAf1+VCUxMyq29yxhq66ZqTXjO2odC+ds9+TXqunag9hNjShgLulOtjCvzAN6EnC5A5lkrVG9AAVUXndu4BiehG3HZMZz0GCOM8qkVaYeMcf3HwPAQllrRKpm+NQn15yc0XUkoZwyECnMayDTDF8/PN0RGn1y7Nj2U5ZWsC7Xw4Is5ZJ7jL3xE21oxyP+ww2RPoMjKxtTbEdA1ldUul3ZrbxLXNl7BOmvVOG0b7pU1Hya3nQBX0SMirvgUHpVhgX4kZnGeehO2GL3peVyjCjZ7db8+FJqzb6s877D77r11ZAgSNo6citOM79JJdk02MMIrJBY4EmYMBEf08NnGX3lCg8o=
+services:
+- docker
+script:
+- cat Dockerfile | sed  "s/\:latest/\:$TAG/g" > Dockerfile.tag
+- docker build -t $PROJECT_NAME -f Dockerfile.tag .
+after_script:
+- docker images
+before_deploy:
+- docker tag "$PROJECT_NAME $IMAGE_NAME:$TAG"
+- docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: docker push "$IMAGE_NAME:$TAG"
+  on:
+    all_branches: true
