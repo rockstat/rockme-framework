@@ -1,7 +1,7 @@
 PERCENT := %
 DEL := /
-CODE_BRANCH != shell git branch | grep \* | cut -d ' ' -f2-
-BR ?= $${TRAVIS_BRANCH:-$(CODE_BRANCH)}
+BR != shell git branch | grep \* | cut -d ' ' -f2-
+
 esc_repo := $(subst $(DEL),$(PERCENT)2F,$(repo))
 
 br:
@@ -31,7 +31,7 @@ push:
 
 travis-trigger:
 
-	@BODY='{"request": {"branch":"$(BR)" }}'
+	@BODY='{"request": {"branch":"$(br)" }}'
 	curl -s -X POST -v \
 		-H "Content-Type: application/json" \
 		-H "Accept: application/json" \

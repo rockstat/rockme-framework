@@ -24,8 +24,8 @@ before_deploy:
 - docker tag "$PROJECT_NAME" "$IMAGE_NAME:$TAG"
 - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 after_deploy:
-- make repo=rockstat/front travis-trigger
-- make repo=rockstat/chwriter travis-trigger
+- make repo=rockstat/front br=$TRAVIS_BRANCH travis-trigger
+- make repo=rockstat/chwriter br=$TRAVIS_BRANCH travis-trigger
 deploy:
   provider: script
   skip_cleanup: true
