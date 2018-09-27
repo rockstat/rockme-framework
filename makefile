@@ -1,7 +1,8 @@
+PERCENT := %
+DEL := /
 CODE_BRANCH != shell git branch | grep \* | cut -d ' ' -f2-
-BR := $${TRAVIS_BRANCH:-$(CODE_BRANCH)}
-TRAVIS_REPO :=$${TRAVIS_REPO_SLUG/\//\%2F}
-branch ?= $(BR)
+BR ?= $${TRAVIS_BRANCH:-$(CODE_BRANCH)}
+esc_repo := $(subst $(DEL),$(PERCENT)2F,$(repo))
 
 br:
 	@echo "$(BR)"
@@ -29,12 +30,12 @@ push:
 	git push origin dev
 
 travis-trigger:
-	
-	@BODY='{"request": {"branch":"$(branch)" }}'
+
+	@BODY='{"request": {"branch":"$(BR)" }}'
 	curl -s -X POST -v \
 		-H "Content-Type: application/json" \
 		-H "Accept: application/json" \
 		-H "Travis-API-Version: 3" \
 		-H "Authorization: token $$TRAVIS_TOKEN" \
 		-d "$$BODY" \
-		https://api.travis-ci.com/repo/$(repo)/requests
+		https://api.travis-ci.com/repo/$(esc_repo)/requests
