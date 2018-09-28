@@ -111,11 +111,10 @@ export class RPCAgnostic {
     // Handling request
     if ('method' in msg && msg.method !== undefined && msg.to && msg.params !== undefined && msg.method in this.methods) {
       this.dispatchRequest(msg).then(res => {
-        if (res) {
+        if (res !== undefined) {
           this.publish(res);
-        } else {
-          this.log.warn('no response given dispatchRequest')
         }
+        // response can be empty if case of is notification
       })
       return;
     }
