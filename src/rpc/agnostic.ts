@@ -90,7 +90,7 @@ export class RPCAgnostic {
         call.resolve(call.bag);
       }
       else {
-        call.reject(new Error('Reuest timeout'));
+        call.reject(new Error('Request timeout'));
       }
       this.cleanWaiter(id);
     } else {
