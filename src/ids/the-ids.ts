@@ -27,4 +27,8 @@ export class TheIds {
     return new Uint64BE(buff).toString()
   }
 
+  static SInt64ToBase64(str: string): string {
+    return new Uint64BE(str, 10).toBuffer().toString('base64')
+  }
+
 }

@@ -23,5 +23,5 @@ export interface ImplicitConfig {
 
 export interface AppConfigOptions {
   dir?: string;
-  vars?: { [k: string]: any }
+  vars?: { [k: string]: any };
 }

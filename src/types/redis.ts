@@ -7,6 +7,9 @@ export interface RedisClientType {
   on(event: string, func: (...args: any[]) => void): void;
   publish(topic: string, raw: any): void;
   subscribe(channel: string, func: Function): void;
+  get(key: string): Promise<string | null>
+  hgetall(key: string): Promise<Array<any> | null>
+  set(key: string, value: string): Promise<any>
 }
 
 export interface RedisFactoryType {

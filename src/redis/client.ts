@@ -1,6 +1,4 @@
 import * as Redis from 'redis-fast-driver';
-import { RedisOptions } from 'redis-fast-driver';
-
 import { RedisConfig, LoggerType, RedisClientOptions, MeterFacade } from '../types';
 import { StubLogger } from '../log';
 import { StubMeter } from '../meter';
@@ -60,12 +58,24 @@ export class RedisClient {
     });
   }
 
+  get(key: string): Promise<string | null> {
+    return this.client.rawCallAsync(['GET', key]);
+  }
+
+  hgetall(key: string): Promise<Array<string>> {
+    return this.client.rawCallAsync(['HGETALL', key]);
+  }
+
+  set(key: string, value: string): Promise<any> {
+    return this.client.rawCallAsync(['SET', key, value]);
+  }
+
   on = (event: string, func: (...args: any[]) => void) => {
     this.client.on(event, func);
   }
 
   publish(topic: string, raw: any): void {
-    this.client.rawCall(['publish', topic, raw], (error: Error, msg: any) => {
+    this.client.rawCall(['PUBLISH', topic, raw], (error: Error, msg: any) => {
       if (error) {
         this.log.error('Redis publish error', error);
       }
@@ -73,7 +83,7 @@ export class RedisClient {
   }
 
   subscribe(channel: string, func: Function): void {
-    this.client.rawCall(['subscribe', channel], (error: Error, msg: Array<string>) => {
+    this.client.rawCall(['SUBSCRIBE', channel], (error: Error, msg: Array<string>) => {
       if (error) {
         this.log.error('Redis error', error);
         return;
