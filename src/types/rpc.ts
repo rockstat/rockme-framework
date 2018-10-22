@@ -1,6 +1,5 @@
 
 import { MeterFacade } from "./meter";
-import { LoggerType } from "./log";
 import { RedisFactoryType } from "./redis";
 import { Logger } from "../log";
 
@@ -17,11 +16,8 @@ export interface RpcMethods {
 }
 
 export interface RPCAdapter {
-
   send(to: string, msg: any): void;
   on(event: string, fn: RPCRequestHandler, context?: any): this;
-
-  // receiver: (data: any) => void;
 }
 
 export interface RPCRegisterStruct {

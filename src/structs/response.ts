@@ -47,32 +47,30 @@ export type ResponseTypePixel = typeof RESP_PIXEL;
 export type ResponseTypeError = typeof RESP_ERROR;
 export type ResponseTypeData = typeof RESP_DATA;
 
-export type BandResponseDataType = { [k: string]: any } | string | number | null;
+export type BandResponseDataType = { [k: string]: any } | Array<any> | string | number | null;
 
 export interface BandResponseBase {
+  [RESP_TYPE_KEY]: ResponseTypeRedirect | ResponseTypePixel | ResponseTypeError | ResponseTypeData;
   headers: HTTPHeaders,
+  statusCode: number;
 }
 
 export type BandResponseRedirect = {
   [RESP_TYPE_KEY]: ResponseTypeRedirect;
   location: string;
-  statusCode: number;
 } & BandResponseBase;
 
 export type BandResponsePixel = {
   [RESP_TYPE_KEY]: ResponseTypePixel;
-  statusCode: number;
 } & BandResponseBase;
 
 export type BandResponseError = {
   [RESP_TYPE_KEY]: ResponseTypeError;
-  statusCode: number;
   errorMessage: string;
 } & BandResponseBase;
 
 export type BandResponseData = {
   [RESP_TYPE_KEY]: ResponseTypeData;
-  statusCode: number;
   contentType?: string;
   data: BandResponseDataType;
 } & BandResponseBase;
@@ -90,6 +88,9 @@ export type BandResponse = BandResponseData
   | BandResponsePixel
   | BandResponseRedirect
   | BandResponseError
+
+
+export type UnknownResponse = BandResponse | string | number | Array<any> | Object;
 
 export type BandRedirectResponseBuilder = (params: { location: string, statusCode?: HTTPCodes, headers?: HTTPHeaders }) => BandResponseRedirect;
 
@@ -141,7 +142,7 @@ const data: BandDataResponsdeBuilder = ({ data, statusCode, headers, contentType
  * Check is correct band response
  * @param msg 
  */
-export const isBandResponse = (msg: BandResponseDataType | BandResponse) => {
+export const isBandResponse = (msg: UnknownResponse) => {
   return msg !== undefined
     && msg !== null
     && typeof msg === 'object'
