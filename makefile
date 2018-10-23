@@ -21,6 +21,18 @@ to_master:
 	@echo $(BR)
 	git checkout master && git rebase $(BR) && git checkout $(BR)
 
+build:
+	docker build -t band-base-ts .
+
+push-latest:
+	docker tag band-base-ts rockstat/band-base-ts:latest
+	docker push rockstat/band-base-ts:latest
+
+push-dev:
+	docker tag band-base-ts rockstat/band-base-ts:dev
+	docker push rockstat/band-base-ts:dev
+
+
 push:
 	git push origin master
 	git push origin dev
