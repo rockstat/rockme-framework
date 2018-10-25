@@ -28,7 +28,7 @@ export type HTTPCodes = keyof typeof STATUS_DESCRIPTIONS;
 export type HTTPHeader = [string, number | string | string[]];
 export type HTTPHeaders = Array<HTTPHeader>;
 
-const RESP_TYPE_KEY = '_response___type';
+const RESP_TYPE_KEY = 'type__';
 const RESP_PIXEL = 'pixel'
 const RESP_REDIRECT = 'redirect'
 const RESP_ERROR = 'error'
@@ -50,27 +50,29 @@ export type ResponseTypeData = typeof RESP_DATA;
 export type BandResponseDataType = { [k: string]: any } | Array<any> | string | number | null;
 
 export interface BandResponseBase {
-  [RESP_TYPE_KEY]: ResponseTypeRedirect | ResponseTypePixel | ResponseTypeError | ResponseTypeData;
-  headers: HTTPHeaders,
+  type__: ResponseTypeRedirect | ResponseTypePixel | ResponseTypeError | ResponseTypeData;
+  id__?: string;
+  native__?: boolean;
+  headers: HTTPHeaders;
   statusCode: number;
 }
 
 export type BandResponseRedirect = {
-  [RESP_TYPE_KEY]: ResponseTypeRedirect;
+  type__: ResponseTypeRedirect;
   location: string;
 } & BandResponseBase;
 
 export type BandResponsePixel = {
-  [RESP_TYPE_KEY]: ResponseTypePixel;
+  type__: ResponseTypePixel;
 } & BandResponseBase;
 
 export type BandResponseError = {
-  [RESP_TYPE_KEY]: ResponseTypeError;
+  type__: ResponseTypeError;
   errorMessage: string;
 } & BandResponseBase;
 
 export type BandResponseData = {
-  [RESP_TYPE_KEY]: ResponseTypeData;
+  type__: ResponseTypeData;
   contentType?: string;
   data: BandResponseDataType;
 } & BandResponseBase;
@@ -96,7 +98,7 @@ export type BandRedirectResponseBuilder = (params: { location: string, statusCod
 
 const redirect: BandRedirectResponseBuilder = ({ location, statusCode, headers }) => {
   return {
-    [RESP_TYPE_KEY]: RESP_REDIRECT,
+    type__: RESP_REDIRECT,
     headers: headers || [],
     location,
     statusCode: statusCode || STATUS_TEMP_REDIR,
@@ -107,7 +109,7 @@ export type BandPixelResponseBuilder = (params: { statusCode?: HTTPCodes, header
 
 const pixel: BandPixelResponseBuilder = ({ statusCode, headers }) => {
   return {
-    [RESP_TYPE_KEY]: RESP_PIXEL,
+    type__: RESP_PIXEL,
     headers: headers || [],
     statusCode: statusCode || STATUS_OK,
     type: RESP_PIXEL
@@ -119,7 +121,7 @@ export type BandErrorResponseBuilder = (params: { statusCode?: HTTPCodes, errorM
 const error: BandErrorResponseBuilder = ({ statusCode, errorMessage, headers }) => {
   statusCode = statusCode || STATUS_INT_ERROR;
   return {
-    [RESP_TYPE_KEY]: RESP_ERROR,
+    type__: RESP_ERROR,
     headers: headers || [],
     statusCode: statusCode,
     errorMessage: errorMessage || STATUS_DESCRIPTIONS[statusCode],
@@ -130,7 +132,7 @@ export type BandDataResponsdeBuilder = (params: { data?: BandResponseData['data'
 
 const data: BandDataResponsdeBuilder = ({ data, statusCode, headers, contentType }) => {
   return {
-    [RESP_TYPE_KEY]: RESP_DATA,
+    type__: RESP_DATA,
     headers: headers || [],
     statusCode: statusCode || STATUS_OK,
     contentType: contentType,
