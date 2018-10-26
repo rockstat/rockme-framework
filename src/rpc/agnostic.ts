@@ -1,6 +1,6 @@
 import { reject, method } from "bluebird";
 import { TheIds } from "../ids";
-import { RPCAdapter, RPCWaitingCall } from "../types"
+import { RPCAdapter, RPCWaitingCall, RPCRequestOptions } from "../types"
 import { StubLogger } from '../log'
 import { StubMeter } from '../meter'
 
@@ -225,16 +225,16 @@ export class RPCAgnostic {
    * @param params remote method params
    * @param services services list for answer waiting
    */
-  request<T>(target: string, method: string, params: RPCRequestParams = null, services?: string[]): Promise<T> {
+  request<T>(target: string, method: string, params: RPCRequestParams = null, options: RPCRequestOptions = {}): Promise<T> {
     return new Promise<any>((resolve, reject) => {
       const id = this.ids.round();
       // if destination services is empty do not send request
-      if (services && services.length == 0) {
+      if (options.services && options.services.length == 0) {
         return resolve();
       }
       // fill services for simple request
-      services = services || [];
-      const multi = services.length > 0;
+      options.services = options.services || [];
+      const multi = options.services.length > 0;
       const msg: RPCRequest = {
         jsonrpc: RPC20,
         from: this.name,
@@ -248,10 +248,10 @@ export class RPCAgnostic {
         reject,
         bag: {},
         multi: multi,
-        services: services,
+        services: options.services,
         timing: this.meter.timenote('rpc.request', { target, method }),
         params: params,
-        timeout: setTimeout(() => this.onTimeout(id), this.timeout)
+        timeout: setTimeout(() => this.onTimeout(id), options.timeout || this.timeout)
       };
       this.publish(msg)
     })

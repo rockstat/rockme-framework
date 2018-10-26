@@ -43,6 +43,11 @@ export interface RPCRequest extends RPCBase {
   params: RPCRequestParams;
 }
 
+export interface RPCRequestOptions {
+  timeout?: number;
+  services?: string[];
+}
+
 export interface RPCResponse extends RPCBase {
   id: string;
   result: any;
