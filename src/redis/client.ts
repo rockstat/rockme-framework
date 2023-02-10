@@ -17,6 +17,8 @@ export class RedisClient {
     const { log, meter, ...config } = options;
 
     this.log = log ? log.for(this) : new StubLogger();
+
+    this.log.info(`Starting redis client constructor`);
     this.meter = meter ? meter : new StubMeter();
 
 

@@ -3,7 +3,7 @@ import {
   RedisClientType,
   LoggerType
 } from "../../types";
-import EventEmitter from 'eventemitter3';
+import { EventEmitter } from 'eventemitter3';
 import { RPCAdapter } from '../../types';
 import { StubLogger } from "../../log";
 
