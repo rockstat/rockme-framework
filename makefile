@@ -9,6 +9,9 @@ bump-patch:
 bump-minor:
 	bumpversion minor
 
+bump-major:
+	bumpversion major
+
 up_master: 
 	@echo "on branch $(BR)"
 	

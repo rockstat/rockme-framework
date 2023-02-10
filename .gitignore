@@ -1,7 +1,9 @@
 /.vscode
+/.yarn
 /node_modules
 /yarn-error.log
 /deploy
 /.env*
 /dist
 /emergency
+*/.DS_Store

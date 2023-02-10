@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { safeLoadAll } from 'js-yaml';
+import { loadAll } from 'js-yaml';
 import { render as ejsRender } from 'ejs';
 import { sync as globSync } from 'glob';
 import * as dotenv from 'dotenv';
@@ -55,7 +55,7 @@ export class AppConfig<T> {
       ...(options.vars || {})
     }
     const yaml = ejsRender(parts.join('\n'), tmplData, { async: false });
-    const docs = safeLoadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined)
+    const docs = loadAll(yaml).filter(cfg => cfg !== null && cfg !== undefined)
     const { dev, prod, ...common } = mergeOptions({}, ...<object[]>docs);
     return mergeOptions(common, this.isProd() ? prod : dev);
   }

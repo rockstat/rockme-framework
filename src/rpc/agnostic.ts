@@ -159,7 +159,7 @@ export class RPCAgnostic {
           if ('result' in msg) {
             call.bag[msg.from] = msg.result;
             // complete
-            if (call.services.length === 0 && call.resolve) {
+            if (call.services.length === 0 && call.resolve !== undefined) {
               this.resolve(msg.id, call.bag, call);
               this.cleanWaiter(msg.id, call)
             }
@@ -175,7 +175,7 @@ export class RPCAgnostic {
       }
       // single requests
       else {
-        if ('result' in msg && call.resolve) {
+        if ('result' in msg && call.resolve !== undefined) {
           this.resolve(msg.id, msg.result, call);
           return;
         }
@@ -230,7 +230,7 @@ export class RPCAgnostic {
       const id = this.ids.round();
       // if destination services is empty do not send request
       if (options.services && options.services.length == 0) {
-        return resolve();
+        return resolve(null);
       }
       // fill services for simple request
       options.services = options.services || [];

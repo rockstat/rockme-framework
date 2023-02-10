@@ -1,4 +1,3 @@
-import { format as dateFormat } from 'cctz';
 import { RPCAppStatus, RequestHandler } from '../types';
 
 export class AppStatus {
