@@ -1,7 +1,7 @@
 FROM node:8-alpine
 
 LABEL maintainer="Dmitry Rodin <madiedinro@gmail.com>"
-LABEL band.base-ts.version="2.0.0"
+LABEL band.base-ts.version="2.0.1"
 
 ENV TZ UTC
 ENV LOG_LEVEL warn
