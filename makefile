@@ -26,9 +26,13 @@ to_master:
 
 build:
 	docker build -t band-base-ts .
+	docker tag band-base-ts rockstat/band-base-ts:ng
+
+push-ng:
+	docker push rockstat/band-base-ts:ng
 
 push-latest:
-	docker tag band-base-ts rockstat/band-base-ts:latest
+	
 	docker push rockstat/band-base-ts:latest
 
 push-dev:

@@ -1,20 +1,19 @@
-FROM node:8-alpine
+FROM node:18-alpine
 
 LABEL maintainer="Dmitry Rodin <madiedinro@gmail.com>"
-LABEL band.base-ts.version="2.0.1"
+LABEL band.base-ts.version="2.1.1"
 
 ENV TZ UTC
 ENV LOG_LEVEL warn
 
-RUN apk add python --no-cache make build-base gcc git curl
+RUN apk add python3 --no-cache make build-base gcc git curl
 
 WORKDIR /usr/src/rockme
 
 COPY package.json .
-COPY yarn.lock .
+COPY package-lock.json .
 
-RUN yarn install \
-  && yarn cache clean
+RUN npm install
 
 COPY . .
 
