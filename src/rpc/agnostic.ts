@@ -1,4 +1,3 @@
-import { reject, method } from "bluebird";
 import { TheIds } from "../ids";
 import { RPCAdapter, RPCWaitingCall, RPCRequestOptions } from "../types"
 import { StubLogger } from '../log'
@@ -26,7 +25,7 @@ export class RPCAgnostic {
   started: boolean = false;
   timeout: number;
   log: LoggerType;
-  queue: RPCWaitingCalls = {};
+  queue: RPCWaitingCalls = new Map();
   methods: RpcMethods = {};
   adapter: RPCAdapter;
   listen_direct: boolean;
@@ -79,13 +78,13 @@ export class RPCAgnostic {
     if (call && call.timeout) {
       clearTimeout(call.timeout)
     }
-    this.queue[id] = undefined;
+    this.queue.delete(id);
   }
 
   onTimeout = (id: string) => {
-    const call = this.queue[id];
+    const call = this.queue.get(id);
     if (call) {
-      this.queue[id] = undefined;
+      this.queue.delete(id);
       if (call.multi) {
         call.resolve(call.bag);
       }
@@ -149,7 +148,7 @@ export class RPCAgnostic {
 
 
   async dispatchResponse(msg: RPCResponse | RPCResponseError): Promise<void> {
-    const call = this.queue[msg.id];
+    const call = this.queue.get(msg.id);
     if (call) {
       // handling multi-destination request
       if (call.multi) {
@@ -243,7 +242,7 @@ export class RPCAgnostic {
         method: method,
         params: params || null
       }
-      this.queue[id] = {
+      this.queue.set(id, {
         resolve,
         reject,
         bag: {},
@@ -252,7 +251,7 @@ export class RPCAgnostic {
         timing: this.meter.timenote('rpc.request', { target, method }),
         params: params,
         timeout: setTimeout(() => this.onTimeout(id), options.timeout || this.timeout)
-      };
+      });
       this.publish(msg)
     })
   }

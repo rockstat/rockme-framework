@@ -76,7 +76,11 @@ export interface RPCWaitingCall {
   services: string[];
 }
 
-export type RPCWaitingCalls = { [k: string]: RPCWaitingCall | undefined };
+// export type RPCWaitingCalls = { [k: string]: RPCWaitingCall | undefined };
+
+export type RPCWaitingCalls = Map<string, RPCWaitingCall | undefined>;
+
+
 
 export interface RPCConfig {
   name: string;
