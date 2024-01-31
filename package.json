@@ -1,6 +1,6 @@
 {
   "name": "@rockstat/rock-me-ts",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Package contains Agnostic JSON-RPC2 client/server implementation and other Rockstat requirements for microservice development",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -7,4 +7,4 @@ export * from './redis';
 export * from './config';
 export * from './structs';
 // export * from './runner';
-export const version = '2.1.1';
+export const version = '2.1.2';
