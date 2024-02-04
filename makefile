@@ -24,20 +24,29 @@ to_master:
 	@echo $(BR)
 	git checkout master && git rebase $(BR) && git checkout $(BR)
 
+build_amd64:
+	docker buildx build --platform linux/amd64 -t band-base-ts .
+
 build:
 	docker build -t band-base-ts .
+
+tag-ng:
 	docker tag band-base-ts rockstat/band-base-ts:ng
+
+tag-latest:
+	docker tag band-base-ts rockstat/band-base-ts:latest
 
 push-ng:
 	docker push rockstat/band-base-ts:ng
 
 push-latest:
-	
 	docker push rockstat/band-base-ts:latest
 
 push-dev:
 	docker tag band-base-ts rockstat/band-base-ts:dev
 	docker push rockstat/band-base-ts:dev
+
+full-ng: build_amd64 tag-ng push-ng
 
 
 push:
