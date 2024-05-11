@@ -16,6 +16,12 @@ export class Meter implements MeterFacade {
     }
   }
 
+  gauge(metric: string, value: number, tags?: { [k: string]: string | number }) {
+    for(const m of this.meters){
+      m.gauge(metric, value, tags);
+    }
+  }
+
   timenote(metric: string, tags?: { [k: string]: string | number }): () => number {
     const start = process.hrtime();
     return () => {

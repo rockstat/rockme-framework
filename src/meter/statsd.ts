@@ -13,6 +13,10 @@ export class StatsdMeter implements MetricsCollector {
   tick(metric: string, tags?: { [k: string]: string | number }) {
     this.client.increment(metric, undefined, tags);
   }
+  
+  gauge(metric: string, value: number, tags?: { [k: string]: string | number }) {
+    this.client.gauge(metric, value, tags);
+  }
 
   timenote(metric: string, tags?: { [k: string]: string | number }): () => number {
     const start = process.hrtime();
