@@ -2,15 +2,25 @@ import { IdGenShowFlake } from './snow_flake';
 import { IdGenRoundCounter } from './round_counter';
 import { hash64 } from 'xxhash';
 import { Uint64BE } from 'int64-buffer'
+import { Logger } from '..';
+import { Service, Inject, Container } from 'typedi';
 
 
 export class TheIds {
 
   sf: IdGenShowFlake;
   rpcCounter: IdGenRoundCounter;
+  // log: Logger;
 
   constructor() {
-    this.sf = new IdGenShowFlake();
+
+    // this.log = Container.get(Logger).for(this);
+    // this.log.info('Starting');
+    // console.log('TheIds conf', config)
+    const datacenter = process.env['DATACENTER_ID'] && Number(process.env['DATACENTER_ID']) || 1;
+    const worker = process.env['WORKER_ID'] && Number(process.env['WORKER_ID']) || 1;
+
+    this.sf = new IdGenShowFlake(datacenter, worker);
     this.rpcCounter = new IdGenRoundCounter();
   }
 

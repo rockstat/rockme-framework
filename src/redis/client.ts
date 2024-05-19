@@ -68,6 +68,14 @@ export class RedisClient {
     return this.client.rawCallAsync(['HGETALL', key]);
   }
 
+  hmset(key: string, ...pairs: any[]): Promise<Array<string>> {
+    return this.client.rawCallAsync(['HMSET', key, ...pairs]);
+  }
+
+  expire(key: string, seconds: number): Promise<Array<string>> {
+    return this.client.rawCallAsync(['EXPIRE', key, seconds]);
+  }
+
   set(key: string, value: string): Promise<any> {
     return this.client.rawCallAsync(['SET', key, value]);
   }
@@ -93,4 +101,15 @@ export class RedisClient {
       func(msg);
     })
   }
+
+  subscribes(channels: string[], func: Function): void {
+    this.client.rawCall(['SUBSCRIBE', ...channels], (error: Error, msg: Array<string>) => {
+      if (error) {
+        this.log.error('Redis error', error);
+        return;
+      }
+      func(msg);
+    })
+  }
+
 }

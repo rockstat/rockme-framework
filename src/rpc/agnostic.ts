@@ -15,6 +15,7 @@ import {
   MeterFacade,
   RequestHandler
 } from "../types";
+import { RESP_DATA } from "..";
 
 const RPC20 = '2.0';
 
@@ -31,11 +32,14 @@ export class RPCAgnostic {
   listen_direct: boolean;
   listen_all: boolean;
   name: string;
+  service_group?: string;
 
   constructor(options: AgnosticRPCOptions) {
     const { name, listen_all, listen_direct, log, meter } = options;
     this.ids = new TheIds();
     this.name = name;
+    this.service_group = options.service_group;
+
     this.timeout = 200;
     this.listen_all = listen_all || false;
     this.listen_direct = listen_direct || true;
@@ -132,13 +136,17 @@ export class RPCAgnostic {
     try {
       const result = await this.methods[method](msg.params || {});
       if ('id' in msg && msg.id !== undefined) {
-        return {
+        const res: RPCResponse = {
           jsonrpc: RPC20,
           id: msg.id,
           from: this.name,
           to: from,
           result: result || null
         }
+        if (this.service_group) {
+          res.service_group = this.service_group;
+        }
+        return res;
       }
     } catch (error) {
       return this.wrapError(msg, error);
@@ -156,7 +164,7 @@ export class RPCAgnostic {
         if (idx >= 0) {
           call.services.splice(idx, 1)
           if ('result' in msg) {
-            call.bag[msg.from] = msg.result;
+            call.bag[msg.service_group || msg.from] = msg.result;
             // complete
             if (call.services.length === 0 && call.resolve !== undefined) {
               this.resolve(msg.id, call.bag, call);
@@ -175,7 +183,11 @@ export class RPCAgnostic {
       // single requests
       else {
         if ('result' in msg && call.resolve !== undefined) {
-          this.resolve(msg.id, msg.result, call);
+          let data;
+          if ('data' in msg.result && typeof msg.result.data === 'object' && !Array.isArray(msg.result.data) && 'type__' in msg.result && msg.result.type__ === RESP_DATA) {
+            data = msg.result.data;
+          }
+          this.resolve(msg.id, data || msg.result, call);
           return;
         }
         else if ('error' in msg && call.reject) {

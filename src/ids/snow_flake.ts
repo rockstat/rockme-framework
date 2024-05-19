@@ -5,8 +5,12 @@ export class IdGenShowFlake {
 
   idGen: FlakeIdGen;
 
-  constructor() {
-    this.idGen = new FlakeIdGen();
+  constructor(datacenter?: number, worker?: number) {
+    datacenter = datacenter || 1;
+    worker = worker || 1;
+    this.idGen = new FlakeIdGen({datacenter, worker});
+
+    console.log('Theids', {datacenter, worker})
   }
 
   take(): string {

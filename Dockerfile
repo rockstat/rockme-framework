@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:18.19.1-alpine3.18
 
 LABEL maintainer="Dmitry Rodin <madiedinro@gmail.com>"
 LABEL band.base-ts.version="2.2.0"

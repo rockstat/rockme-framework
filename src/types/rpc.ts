@@ -33,6 +33,7 @@ export interface RPCBase {
   jsonrpc: '2.0';
   to: string;
   from: string;
+  service_group?: string;
 }
 
 export type RPCRequestParams = { [k: string]: any } | null;
@@ -52,6 +53,7 @@ export interface RPCResponse extends RPCBase {
   id: string;
   result: any;
   cache?: number;
+
 }
 
 export interface RPCErrorDetails {
@@ -84,6 +86,7 @@ export type RPCWaitingCalls = Map<string, RPCWaitingCall | undefined>;
 
 export interface RPCConfig {
   name: string;
+  service_group?: string;
   listen_all?: boolean;
   listen_enrich?: boolean;
   listen_direct?: boolean;

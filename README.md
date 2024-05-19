@@ -24,3 +24,9 @@ Library with main components that needs for building Rockstat microservice on No
 
     this.rpc.setup(this.rpcAdaptor);
     this.rpc.register(BROADCAST, this.chw.write);
+
+
+### ENVS
+
+DATACENTER_ID=1
+WORKER_ID=1

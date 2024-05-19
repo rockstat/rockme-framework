@@ -3,7 +3,10 @@
 export type EnrichersRequirements = Array<[string, string]>
 
 export interface MethodRegistrationOptions {
+  // Rename method
   alias?: string;
+  // For multiple requests. Defines key of final hash
+  section?: string; 
   timeout?: number;
   props?: { [k: string]: string };
   keys?: Array<string>
@@ -15,16 +18,17 @@ export interface MethodRegRequest {
 }
 
 export interface MethodRegistration {
-  service: string;
+  // service: string;
   method: string;
   role: string;
   options: MethodRegistrationOptions;
 }
 
 export interface RPCAppStatus {
-  app_state: "running",
+  name: string;
+  app_state: "running";
   app_started: number;
   app_uptime: number;
-  methods: Array<MethodRegistration>
+  register: MethodRegistration[]
 }
 

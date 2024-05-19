@@ -27,7 +27,7 @@ import {
   RPCAdapter,
   ConfigRoot
 } from '../types';
-import { AppStatus } from '../rpc'
+// import { AppStatus } from '../rpc'
 
 export class Deps<T> {
   log: Logger;
@@ -51,7 +51,7 @@ export class AppRunner<T> {
   log: Logger;
   deps: Deps<T>;
   ids: TheIds;
-  status: AppStatus;
+  // status: AppStatus;
   meter: Meter;
   config: AppConfig<ConfigRoot>
   name: string;
@@ -61,7 +61,7 @@ export class AppRunner<T> {
 
   constructor() {
     this.config = new AppConfig<ConfigRoot>();
-    this.status = new AppStatus();
+    // this.status = new AppStatus();
     this.log = new Logger(this.config.log).for(this);
     this.meter = new Meter(this.config.meter);
     this.ids = new TheIds();
@@ -100,7 +100,7 @@ export class AppRunner<T> {
     const rpcAdaptor = new RPCAdapterRedis(rpcOptions);
     this.rpc.setup(rpcAdaptor);
 
-    this.rpc.register(METHOD_STATUS, this.status.get);
+    // this.rpc.register(METHOD_STATUS, this.status.get);
     const aliver = () => {
       this.rpc.notify(SERVICE_DIRECTOR, METHOD_IAMALIVE, { name: this.name })
     };

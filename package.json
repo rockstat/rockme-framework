@@ -61,9 +61,10 @@
     "js-yaml": "^4.1.0",
     "lru-cache": "^7.14.1",
     "merge-options": "^3.0.4",
-    "pino": "^8.10.0",
+    "pino": "^9.1.0",
     "redis-fast-driver": "^2.2.4",
     "statsd-client": "^0.4.7",
+    "typedi": "^0.10.0",
     "xxhash": "^0.3.0"
   },
   "devDependencies": {

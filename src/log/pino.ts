@@ -11,6 +11,13 @@ export class Logger implements LoggerType {
   info: LogFn;
   trace: LogFn;
 
+  // debug: LogFn = (...args: any[]) => { };
+  // info: LogFn = (...args: any[]) => { };
+  // warn: LogFn = (...args: any[]) => { };
+  // error: LogFn = (...args: any[]) => { };
+  // trace: LogFn = (...args: any[]) => { };
+  // fatal: LogFn = (...args: any[]) => { };
+
   logger: pino.Logger;
 
   methods: LogLevel[] = ['trace', 'info', 'debug', 'warn', 'error', 'fatal'];

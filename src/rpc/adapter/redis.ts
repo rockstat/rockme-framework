@@ -6,6 +6,8 @@ import {
 import { EventEmitter } from 'eventemitter3';
 import { RPCAdapter } from '../../types';
 import { StubLogger } from "../../log";
+import test from "node:test";
+import { channel } from "node:diagnostics_channel";
 
 export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
 
@@ -28,9 +30,11 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
     this.rsub = redisFactory.create();
 
     this.rsub.on('connect', () => {
-      for (const chan of channels) {
-        this.rsub.subscribe(chan, this.redisMsg);
-      }
+
+      // for (const chan of channels) {
+      this.log.debug( {channels, a: test}, 'subscribing')
+      this.rsub.subscribes(channels, this.redisMsg);
+      // }
     })
 
     this.rpub = redisFactory.create();
@@ -67,8 +71,10 @@ export class RPCAdapterRedis extends EventEmitter implements RPCAdapter {
       if (msg && msg.jsonrpc === '2.0') {
         this.emit('message', msg);
       }
+    } else if (redismsg[0] === 'subscribe') {
+      this.log.info({channel: redismsg[1]}, 'subscribed');
     } else {
-      this.log.debug('unhandled cmd', redismsg);
+      this.log.debug(redismsg, 'unhandled cmd');
     }
   }
 
