@@ -19,6 +19,7 @@ export interface MeterConfig {
 
 export interface MetricsCollector {
   tick(metric: string, tags?: { [k: string]: string | number }):void;
+  incr(metric: string, delta?:number, tags?: { [k: string]: string | number }):void;
   time(metric: string, duration: number, tags?: { [k: string]: string | number }): void;
   gauge(metric: string, value: number, tags?: { [k: string]: string | number }): void;
 }

@@ -1,7 +1,6 @@
 import * as Redis from 'redis-fast-driver';
 import { RedisConfig, LoggerType, RedisClientOptions, MeterFacade } from '../types';
 import { StubLogger } from '../log';
-import { StubMeter } from '../meter';
 import { parse as urlParse } from 'url';
 
 export class RedisClient {
@@ -19,7 +18,6 @@ export class RedisClient {
     this.log = log ? log.for(this) : new StubLogger();
 
     this.log.info(`Starting redis client constructor`);
-    this.meter = meter ? meter : new StubMeter();
 
 
     const parts = urlParse(config.dsn)

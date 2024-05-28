@@ -5,19 +5,27 @@ export class Meter implements MeterFacade {
   meters: MetricsCollector[] = [];
 
   constructor(options: MeterConfig) {
-    if(options.statsd){
+    if (options.statsd) {
       this.meters.push(new StatsdMeter(options.statsd));
     }
   }
 
   tick(metric: string, tags?: { [k: string]: string | number }) {
-    for(const m of this.meters){
+    for (const m of this.meters) {
       m.tick(metric, tags);
     }
   }
 
+  incr(metric: string, delta?: number, tags?: { [k: string]: string | number }) {
+    if (!delta) {
+      delta = 1;
+    }
+    for (const m of this.meters) {
+      m.incr(metric, delta, tags);
+    }
+  }
   gauge(metric: string, value: number, tags?: { [k: string]: string | number }) {
-    for(const m of this.meters){
+    for (const m of this.meters) {
       m.gauge(metric, value, tags);
     }
   }
@@ -33,7 +41,7 @@ export class Meter implements MeterFacade {
   }
 
   time(metric: string, duration: number, tags?: { [k: string]: string | number }): void {
-    for(const m of this.meters){
+    for (const m of this.meters) {
       m.time(metric, duration, tags);
     }
   }

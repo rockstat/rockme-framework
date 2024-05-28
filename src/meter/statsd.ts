@@ -11,9 +11,14 @@ export class StatsdMeter implements MetricsCollector {
   }
 
   tick(metric: string, tags?: { [k: string]: string | number }) {
-    this.client.increment(metric, undefined, tags);
+    this.client.increment(metric, 1, tags);
   }
-  
+
+
+  incr(metric: string, delta?: number, tags?: { [k: string]: string | number }) {
+    this.client.increment(metric, delta, tags);
+  }
+
   gauge(metric: string, value: number, tags?: { [k: string]: string | number }) {
     this.client.gauge(metric, value, tags);
   }

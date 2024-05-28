@@ -70,7 +70,7 @@ export interface RPCResponseError extends RPCBase {
 export interface RPCWaitingCall {
   resolve: (value?: any | PromiseLike<any>) => void;
   reject: (reason?: any) => void;
-  timing: Function;
+  timing?: Function;
   timeout: NodeJS.Timer;
   params: RPCRequestParams;
   multi: boolean;

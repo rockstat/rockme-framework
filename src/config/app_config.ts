@@ -45,11 +45,15 @@ export class AppConfig<T> {
   }
 
   load(options: AppConfigOptions): AbstractConfig<T> {
+
+    const pkg:{[k:string]:any} = JSON.parse(readFileSync('./package.json').toString());
+
     const parts = globSync(
       `${this.configDir}/**/*.yml`, { nosort: true }
     ).map(file => readFileSync(file).toString());
     const tmplData = {
       env: process.env,
+      pkg: pkg,
       envName: AppConfig.env,
       consts,
       ...(options.vars || {})

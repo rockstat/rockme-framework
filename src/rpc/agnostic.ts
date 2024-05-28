@@ -1,7 +1,6 @@
 import { TheIds } from "../ids";
 import { RPCAdapter, RPCWaitingCall, RPCRequestOptions } from "../types"
 import { StubLogger } from '../log'
-import { StubMeter } from '../meter'
 
 import {
   AgnosticRPCOptions,
@@ -22,7 +21,7 @@ const RPC20 = '2.0';
 export class RPCAgnostic {
 
   ids: TheIds;
-  meter: MeterFacade;
+  meter?: MeterFacade;
   started: boolean = false;
   timeout: number;
   log: LoggerType;
@@ -44,7 +43,7 @@ export class RPCAgnostic {
     this.listen_all = listen_all || false;
     this.listen_direct = listen_direct || true;
     this.log = log ? log : new StubLogger();
-    this.meter = meter ? meter : new StubMeter();
+    this.meter = meter;
   }
 
   setup(adapter: RPCAdapter) {
@@ -65,7 +64,9 @@ export class RPCAgnostic {
   resolve(id: string, result: any, call: RPCWaitingCall) {
     this.log.debug('resolve')
     if (call.resolve && result !== undefined) {
-      call.timing();
+      if (call.timing){
+        call.timing();
+      }
       call.resolve(result);
       this.cleanWaiter(id, call)
     } else {
@@ -191,14 +192,17 @@ export class RPCAgnostic {
           return;
         }
         else if ('error' in msg && call.reject) {
-          this.meter.tick('rpc.error')
+
+          if (this.meter) {
+            this.meter.tick('rpc.error')
+          }
           this.log.warn('rpc error')
           call.reject(msg.error);
           return;
         }
       }
     }
-    this.log.warn('unhandled message at dispatchResponse', { msg, call });
+    this.log.warn({ msg, call }, 'unhandled message at dispatchResponse');
   }
 
   /**
@@ -254,16 +258,19 @@ export class RPCAgnostic {
         method: method,
         params: params || null
       }
-      this.queue.set(id, {
+      const qItem: RPCWaitingCall = {
         resolve,
         reject,
         bag: {},
         multi: multi,
         services: options.services,
-        timing: this.meter.timenote('rpc.request', { target, method }),
         params: params,
         timeout: setTimeout(() => this.onTimeout(id), options.timeout || this.timeout)
-      });
+      }
+      if (this.meter){
+        qItem['timing'] = this.meter.timenote('rpc.request', { target, method });
+      }
+      this.queue.set(id, qItem);
       this.publish(msg)
     })
   }
