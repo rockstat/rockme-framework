@@ -71,7 +71,7 @@ export interface RPCWaitingCall {
   resolve: (value?: any | PromiseLike<any>) => void;
   reject: (reason?: any) => void;
   timing?: Function;
-  timeout: NodeJS.Timer;
+  timeout: NodeJS.Timeout ;
   params: RPCRequestParams;
   multi: boolean;
   bag: { [k: string]: any };
