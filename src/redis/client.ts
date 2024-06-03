@@ -78,6 +78,11 @@ export class RedisClient {
     return this.client.rawCallAsync(['SET', key, value]);
   }
 
+  // xGroupCreare(stream: string, group: string) {
+  //   return this.client.rawCallAsync(['XGROUP', 'CREATE', stream, group, '$'])
+
+  // }
+
   on = (event: string, func: (...args: any[]) => void) => {
     this.client.on(event, func);
   }

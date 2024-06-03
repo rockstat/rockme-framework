@@ -2,8 +2,11 @@ import { IdGenShowFlake } from './snow_flake';
 import { IdGenRoundCounter } from './round_counter';
 import { hash64 } from 'xxhash';
 import { Uint64BE } from 'int64-buffer'
-import { Logger } from '..';
-import { Service, Inject, Container } from 'typedi';
+
+export const xxhash = (str: string): string => {
+  const buff = hash64<Buffer>(Buffer.from(str), 0xCACA3ADA, 'buffer')
+  return new Uint64BE(buff).toString()
+}
 
 
 export class TheIds {
@@ -12,16 +15,19 @@ export class TheIds {
   rpcCounter: IdGenRoundCounter;
   // log: Logger;
 
-  constructor() {
+  constructor(datacenter?: number, worker?: number) {
 
     // this.log = Container.get(Logger).for(this);
     // this.log.info('Starting');
     // console.log('TheIds conf', config)
-    const datacenter = process.env['DATACENTER_ID'] && Number(process.env['DATACENTER_ID']) || 1;
-    const worker = process.env['WORKER_ID'] && Number(process.env['WORKER_ID']) || 1;
+    const confDatacenter = process.env['DATACENTER_ID'] && Number(process.env['DATACENTER_ID']) || 1;
+    const confWorker = process.env['WORKER_ID'] && Number(process.env['WORKER_ID']) || 1;
 
-    this.sf = new IdGenShowFlake(datacenter, worker);
+    this.sf = new IdGenShowFlake(confDatacenter, confWorker);
     this.rpcCounter = new IdGenRoundCounter();
+
+    console.log('IdGenShowFlake', { confDatacenter, confWorker})
+
   }
 
   flake(): string {
@@ -33,8 +39,7 @@ export class TheIds {
   }
 
   xxhash(str: string): string {
-    const buff = hash64<Buffer>(Buffer.from(str), 0xCACA3ADA, 'buffer')
-    return new Uint64BE(buff).toString()
+    return xxhash(str);
   }
 
   static SInt64ToBase64(str: string): string {

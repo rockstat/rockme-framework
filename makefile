@@ -2,6 +2,7 @@ PERCENT := %
 DEL := /
 BR != shell git branch | grep \* | cut -d ' ' -f2-
 
+# versions
 
 bump-patch:
 	bumpversion patch
@@ -12,6 +13,8 @@ bump-minor:
 bump-major:
 	bumpversion major
 
+# git
+
 up_master: 
 	@echo "on branch $(BR)"
 	
@@ -20,38 +23,47 @@ up_master:
 	@git checkout master && git rebase dev && git push origin master && git checkout dev \
 		&& echo "master rebased and pushed"
 
+push:
+	git push origin master
+	git push origin dev
+
 to_master:
 	@echo $(BR)
 	git checkout master && git rebase $(BR) && git checkout $(BR)
 
+# common
+
 build_amd64:
-	docker buildx build --platform linux/amd64 -t band-base-ts .
+	# docker buildx build --platform linux/amd64 -t band-base-ts .
+	docker build --platform linux/amd64 -t band-base-ts .
 
 build:
 	docker build -t band-base-ts .
 
+# ng
+
 tag-ng:
 	docker tag band-base-ts rockstat/band-base-ts:ng
 
-tag-latest:
-	docker tag band-base-ts rockstat/band-base-ts:latest
 
 push-ng:
 	docker push rockstat/band-base-ts:ng
 
+all-ng: build_amd64 tag-ng push-ng
+
+# latest
+
+tag-latest:
+	docker tag band-base-ts rockstat/band-base-ts:latest
+
 push-latest:
 	docker push rockstat/band-base-ts:latest
+
+# dev
 
 push-dev:
 	docker tag band-base-ts rockstat/band-base-ts:dev
 	docker push rockstat/band-base-ts:dev
-
-full-ng: build_amd64 tag-ng push-ng
-
-
-push:
-	git push origin master
-	git push origin dev
 
 travis-trigger:
 	curl -vv -s -X POST \

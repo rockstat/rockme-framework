@@ -7,3 +7,4 @@
 /dist
 /emergency
 */.DS_Store
+/.npmrc

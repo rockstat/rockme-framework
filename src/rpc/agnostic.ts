@@ -1,6 +1,7 @@
 import { TheIds } from "../ids";
 import { RPCAdapter, RPCWaitingCall, RPCRequestOptions } from "../types"
 import { StubLogger } from '../log'
+import { getAppDeps } from "..";
 
 import {
   AgnosticRPCOptions,
@@ -35,7 +36,7 @@ export class RPCAgnostic {
 
   constructor(options: AgnosticRPCOptions) {
     const { name, listen_all, listen_direct, log, meter } = options;
-    this.ids = new TheIds();
+    this.ids = getAppDeps().getDep('ids');
     this.name = name;
     this.service_group = options.service_group;
 

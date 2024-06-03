@@ -10,7 +10,6 @@ export class IdGenShowFlake {
     worker = worker || 1;
     this.idGen = new FlakeIdGen({datacenter, worker});
 
-    console.log('Theids', {datacenter, worker})
   }
 
   take(): string {

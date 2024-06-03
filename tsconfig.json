@@ -7,7 +7,6 @@
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "sourceMap": true,
-    "pretty": true,
     "preserveConstEnums": true,
     "removeComments": true,
     "allowUnreachableCode": true,
@@ -22,7 +21,7 @@
       "node_modules/@types",
       "@types"
     ],
-    "baseUrl": "./",
+    "baseUrl": "src",
     "paths": {
       "@app/*": ["src/*"]
     }
