@@ -1,4 +1,3 @@
-import { TheIds } from './ids';
 
 export * from './meter';
 export * from './rpc';
@@ -8,9 +7,9 @@ export * from './redis';
 export * from './config';
 export * from './ids';
 export * from './structs';
-// export * from './AppDeps';
-// export * from './runner';
+const pkg = require('../package.json');
+
 export { getAppDeps } from './AppDeps';
-export const version = '2.2.0';
+export const version = pkg.version;
 
 
