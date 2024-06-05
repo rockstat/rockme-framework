@@ -2,7 +2,6 @@ PERCENT := %
 DEL := /
 BR != shell git branch | grep \* | cut -d ' ' -f2-
 
-
 # versions
 
 bump-patch:
