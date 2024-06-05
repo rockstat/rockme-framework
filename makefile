@@ -2,6 +2,7 @@ PERCENT := %
 DEL := /
 BR != shell git branch | grep \* | cut -d ' ' -f2-
 
+
 # versions
 
 bump-patch:
@@ -33,9 +34,8 @@ to_master:
 
 # common
 
-build_amd64:
-	# docker buildx build --platform linux/amd64 -t band-base-ts .
-	docker build --platform linux/amd64 -t band-base-ts .
+build_macos_arm64:
+	docker build --build-arg NPM_CONFIG_REGISTRY_ARG=http://host.docker.internal:4873/ --platform linux/amd64 -t band-base-ts .
 
 build:
 	docker build -t band-base-ts .
@@ -49,7 +49,7 @@ tag-ng:
 push-ng:
 	docker push rockstat/band-base-ts:ng
 
-all-ng: build_amd64 tag-ng push-ng
+all-ng: build_macos_arm64 tag-ng push-ng
 
 # latest
 
