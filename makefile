@@ -32,9 +32,10 @@ to_master:
 	git checkout master && git rebase $(BR) && git checkout $(BR)
 
 # common
+# --build-arg NPM_CONFIG_REGISTRY_ARG=http://host.docker.internal:4873/
 
 build_macos_arm64:
-	docker build --build-arg NPM_CONFIG_REGISTRY_ARG=http://host.docker.internal:4873/ --platform linux/amd64 -t band-base-ts .
+	docker build  --platform linux/amd64 -t band-base-ts .
 
 build:
 	docker build -t band-base-ts .

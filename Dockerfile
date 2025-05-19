@@ -1,11 +1,11 @@
-FROM node:20.14-alpine
+FROM node:22-alpine
 
 LABEL maintainer="Dmitry Rodin <madiedinro@gmail.com>"
 
 # ARG NPM_CONFIG_REGISTRY_ARG=https://registry.npmjs.org
 
-ENV TZ UTC
-ENV LOG_LEVEL warn
+ENV TZ=UTC
+ENV LOG_LEVEL=warn
 
 RUN apk add python3 --no-cache make build-base gcc git curl
 
