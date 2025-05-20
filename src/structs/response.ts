@@ -33,12 +33,14 @@ const RESP_PIXEL = 'pixel'
 const RESP_REDIRECT = 'redirect'
 const RESP_ERROR = 'error'
 const RESP_DATA = 'data'
+const RESP_STATIC = 'static'
 
 export {
   RESP_TYPE_KEY,
   RESP_PIXEL,
   RESP_REDIRECT,
   RESP_ERROR,
+  RESP_STATIC,
   RESP_DATA
 }
 
@@ -46,11 +48,12 @@ export type ResponseTypeRedirect = typeof RESP_REDIRECT;
 export type ResponseTypePixel = typeof RESP_PIXEL;
 export type ResponseTypeError = typeof RESP_ERROR;
 export type ResponseTypeData = typeof RESP_DATA;
+export type ResponseTypeStatic = typeof RESP_STATIC;
 
 export type BandResponseDataType = { [k: string]: any } | Array<any> | string | number | null;
 
 export interface BandResponseBase {
-  type__: ResponseTypeRedirect | ResponseTypePixel | ResponseTypeError | ResponseTypeData;
+  type__: ResponseTypeRedirect | ResponseTypePixel | ResponseTypeError | ResponseTypeData | ResponseTypeStatic;
   id__?: string;
   native__?: boolean;
   headers: HTTPHeaders;
@@ -77,6 +80,11 @@ export type BandResponseData = {
   data: BandResponseDataType;
 } & BandResponseBase;
 
+export type BandResponseStatic = {
+  type__: ResponseTypeStatic;
+  file: string;
+} & BandResponseBase;
+
 // export type ResponseTypes = ResponseTypeRedirect | ResponseTypeError | ResponseTypePixel | ResponseTypeData | ResponseTypeEmpty;
 // export interface BandResponseFull {
 //   location?: string;
@@ -90,9 +98,26 @@ export type BandResponse = BandResponseData
   | BandResponsePixel
   | BandResponseRedirect
   | BandResponseError
+  | BandResponseStatic
 
 
 export type UnknownResponse = BandResponse | string | number | Array<any> | Object;
+
+
+
+
+export type BandStaticResponseBuilder = (params: { file: string, statusCode?: HTTPCodes, headers?: HTTPHeaders }) => BandResponseStatic;
+
+const statical: BandStaticResponseBuilder = ({ file, statusCode, headers }) => {
+  return {
+    type__: RESP_STATIC,
+    headers: headers || [],
+    file,
+    statusCode: statusCode || STATUS_OK,
+  }
+}
+
+
 
 export type BandRedirectResponseBuilder = (params: { location: string, statusCode?: HTTPCodes, headers?: HTTPHeaders }) => BandResponseRedirect;
 
@@ -156,5 +181,6 @@ export const response = {
   redirect,
   pixel,
   error,
-  data
+  data,
+  statical
 }
